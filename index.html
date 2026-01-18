@@ -6,6 +6,7 @@
     <title>PostMaker Pro - Baatmi Point Creator</title>
     <!-- Premium News Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Updated html2canvas Version -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --accent: #ffcc00; --bg: #0f172a; --card: #1e293b; }
@@ -19,23 +20,29 @@
         .btn { background: var(--accent); color: black; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 18px; width: 100%; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 204, 0, 0.4); }
         
-        /* पोस्ट डिज़ाइन - जो फोटो बनेगी */
-        #render-target { 
-            width: 1000px; height: 1000px; /* High Definition Square */
-            position: fixed; top: -5000px; left: -5000px; /* छिपी हुई */
-            background: #000; border: 15px solid white; overflow: hidden; 
+        /* रेंडरिंग के लिए छिपा हुआ सेक्शन - अब यह 'visibility' के साथ सुधारा गया है */
+        #render-container {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            overflow: hidden;
         }
-        .post-bg { width: 100%; height: 100%; object-fit: cover; }
-        .post-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); }
-        .post-content { position: absolute; bottom: 80px; left: 0; width: 100%; padding: 0 50px; text-align: center; box-sizing: border-box; }
-        .post-title { color: var(--accent); font-family: 'Khand', sans-serif; font-size: 75px; margin-bottom: 10px; line-height: 1; }
-        .post-desc { color: white; font-family: 'Khand', sans-serif; font-size: 52px; line-height: 1.2; }
-        .post-footer { position: absolute; bottom: 30px; width: 100%; text-align: center; color: rgba(255,255,255,0.7); font-size: 35px; }
+        #render-target { 
+            width: 1000px; height: 1000px; 
+            background: #000; border: 15px solid white; position: relative;
+        }
+        .post-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; }
+        .post-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 65%; background: linear-gradient(transparent, rgba(0,0,0,0.98)); }
+        .post-content { position: absolute; bottom: 100px; left: 0; width: 100%; padding: 0 50px; text-align: center; box-sizing: border-box; z-index: 2; }
+        .post-title { color: var(--accent); font-family: 'Khand', sans-serif; font-size: 80px; margin-bottom: 15px; line-height: 1.1; font-weight: 700; text-transform: uppercase; }
+        .post-desc { color: white; font-family: 'Khand', sans-serif; font-size: 55px; line-height: 1.3; font-weight: 500; }
+        .post-footer { position: absolute; bottom: 35px; width: 100%; text-align: center; color: rgba(255,255,255,0.8); font-size: 38px; z-index: 2; font-weight: bold; letter-spacing: 2px; }
 
         /* प्रीव्यू */
-        .preview-area { width: 100%; max-width: 450px; position: sticky; top: 100px; }
-        #preview-img { width: 100%; border-radius: 15px; border: 4px solid var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.6); display: none; }
-        .placeholder { width: 100%; aspect-ratio: 1/1; background: #1e293b; border-radius: 15px; display: flex; align-items: center; justify-content: center; border: 2px dashed #444; color: #64748b; }
+        .preview-area { width: 100%; max-width: 450px; text-align: center; }
+        #preview-img { width: 100%; border-radius: 15px; border: 4px solid var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.6); display: none; margin-top: 10px; }
+        .placeholder { width: 100%; aspect-ratio: 1/1; background: #1e293b; border-radius: 15px; display: flex; align-items: center; justify-content: center; border: 2px dashed #444; color: #64748b; margin-top: 10px; }
+        #hint { display:none; color:var(--accent); margin-top:15px; font-weight:bold; background: rgba(255,204,0,0.1); padding: 10px; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -62,47 +69,99 @@
             <label>4. आपका पेज नाम/लोगो</label>
             <input type="text" id="uFoot" placeholder="उदा: @baatmi_point">
         </div>
-        <button class="btn" onclick="generate()">प्रोफेशनल पोस्ट बनाएँ ✨</button>
+        <button class="btn" id="genBtn" onclick="generate()">प्रोफेशनल पोस्ट बनाएँ ✨</button>
     </div>
 
     <div class="preview-area">
-        <label>लाइव प्रीव्यू</label>
-        <div id="p-box" class="placeholderText">
+        <label>लाइव प्रीव्यू (यहाँ से सेव करें)</label>
+        <div id="p-box">
             <div class="placeholder">फोटो तैयार होकर यहाँ दिखेगी</div>
             <img id="preview-img">
         </div>
-        <p id="hint" style="display:none; color:var(--accent); margin-top:15px; font-weight:bold;">📥 गैलरी में सेव करने के लिए फोटो पर 'लॉन्ग प्रेस' करें!</p>
+        <div id="hint">📥 गैलरी में सेव करने के लिए फोटो पर 'लॉन्ग प्रेस' करें!</div>
     </div>
 </div>
 
-<!-- यह हिस्सा फोटो रेंडर करने के लिए है -->
-<div id="render-target">
-    <img id="render-img" class="post-bg">
-    <div class="post-overlay"></div>
-    <div class="post-content">
-        <div id="rt-title" class="post-title"></div>
-        <div id="rt-desc" class="post-desc"></div>
+<!-- छिपा हुआ रेंडरिंग सेक्शन -->
+<div id="render-container">
+    <div id="render-target">
+        <img id="render-img" class="post-bg" crossOrigin="anonymous">
+        <div class="post-overlay"></div>
+        <div class="post-content">
+            <div id="rt-title" class="post-title"></div>
+            <div id="rt-desc" class="post-desc"></div>
+        </div>
+        <div id="rt-foot" class="post-footer"></div>
     </div>
-    <div id="rt-foot" class="post-footer"></div>
 </div>
 
 <script>
+    // 1. सबसे सुरक्षित तरीका: FileReader का उपयोग करें
     function previewSelected(event) {
         const file = event.target.files[0];
         if(file) {
-            document.getElementById('render-img').src = URL.createObjectURL(file);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('render-img').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
         }
     }
 
-    function generate() {
+    async function generate() {
         const title = document.getElementById('uTitle').value;
         const desc = document.getElementById('uDesc').value;
         const foot = document.getElementById('uFoot').value;
         const img = document.getElementById('render-img');
+        const btn = document.getElementById('genBtn');
 
-        if(!img.src || !title) return alert("कृपया फोटो और शीर्षक भरें!");
+        if(!img.src || title.trim() === "") return alert("कृपया फोटो और शीर्षक भरें!");
 
+        // डेटा भरना
         document.getElementById('rt-title').innerText = title;
+        document.getElementById('rt-desc').innerText = desc;
+        document.getElementById('rt-foot').innerText = foot;
+
+        btn.innerText = "तैयार हो रहा है... ⏳";
+        btn.disabled = true;
+
+        // थोड़ा इंतज़ार करें ताकि इमेज रेंडरिंग के लिए तैयार हो जाए
+        setTimeout(() => {
+            html2canvas(document.querySelector("#render-target"), {
+                scale: 2, // High Quality
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: "#000000",
+                logging: false,
+                width: 1000,
+                height: 1000
+            }).then(canvas => {
+                const previewImg = document.getElementById('preview-img');
+                const placeholder = document.querySelector('.placeholder');
+                
+                // Canvas को Image में बदलें ताकि मोबाइल पर सेव हो सके
+                previewImg.src = canvas.toDataURL("image/png", 1.0);
+                previewImg.style.display = "block";
+                placeholder.style.display = "none";
+                document.getElementById('hint').style.display = "block";
+                
+                btn.innerText = "प्रोफेशनल पोस्ट बनाएँ ✨";
+                btn.disabled = false;
+                
+                // मोबाइल पर स्क्रॉल करें ताकि यूजर को फोटो दिखे
+                previewImg.scrollIntoView({ behavior: 'smooth' });
+            }).catch(err => {
+                console.error("Error:", err);
+                alert("फोटो बनाने में कोई तकनीकी समस्या आई। फिर से कोशिश करें।");
+                btn.innerText = "प्रोफेशनल पोस्ट बनाएँ ✨";
+                btn.disabled = false;
+            });
+        }, 500); // 500ms का छोटा ब्रेक रेंडरिंग पक्का करने के लिए
+    }
+</script>
+
+</body>
+</html>        document.getElementById('rt-title').innerText = title;
         document.getElementById('rt-desc').innerText = desc;
         document.getElementById('rt-foot').innerText = foot;
 
