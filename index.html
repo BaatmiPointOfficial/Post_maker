@@ -1,255 +1,224 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viral Post Creator PRO</title>
-    
-    <!-- Premium Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post Creator Pro v1.1</title>
 
-    <style>
-        :root {
-            --accent: #FFC107;
-            --bg: #0F0F0F;
-            --card: #1A1A1A;
-            --input: #252525;
-            --danger: #FF3D00;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Poppins:wght@400;600&family=Noto+Sans+Devanagari&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-        body {
-            background-color: var(--bg);
-            color: #FFFFFF;
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            -webkit-tap-highlight-color: transparent;
-        }
+<style>
+:root {
+    --accent:#ffcc00;
+    --bg:#0f0f0f;
+    --card:#1a1a1a;
+    --input:#262626;
+}
 
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            background: var(--card);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        }
+body{
+    background:var(--bg);
+    color:#fff;
+    font-family:'Poppins',sans-serif;
+    margin:0;
+    padding:20px;
+    display:flex;
+    justify-content:center;
+}
 
-        header { text-align: center; margin-bottom: 25px; }
-        header h1 { 
-            font-family: 'Khand'; 
-            font-size: 32px; 
-            margin: 0; 
-            color: var(--accent); 
-            letter-spacing: 1px;
-        }
+.app-card{
+    width:100%;
+    max-width:480px;
+    background:var(--card);
+    padding:24px;
+    border-radius:22px;
+}
 
-        .form-section { display: flex; flex-direction: column; gap: 16px; }
+h1{
+    font-family:'Khand';
+    color:var(--accent);
+    text-align:center;
+    margin-bottom:20px;
+}
 
-        .input-group label { font-size: 12px; color: #888; font-weight: 600; margin-bottom: 6px; display: block; text-transform: uppercase; }
+label{
+    font-size:11px;
+    color:#888;
+    text-transform:uppercase;
+    margin-bottom:6px;
+    display:block;
+}
 
-        input, textarea {
-            width: 100%;
-            background: var(--input);
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 14px;
-            color: white;
-            font-size: 15px;
-            outline: none;
-            transition: border 0.3s;
-            box-sizing: border-box;
-        }
+input,textarea{
+    width:100%;
+    padding:14px;
+    background:var(--input);
+    border:1px solid #333;
+    border-radius:12px;
+    color:#fff;
+    margin-bottom:14px;
+}
 
-        input:focus { border-color: var(--accent); }
+.btn{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:14px;
+    font-size:20px;
+    font-family:'Khand';
+    background:linear-gradient(135deg,var(--accent),#f39c12);
+    cursor:pointer;
+    color:#000;
+}
 
-        .main-btn {
-            background: linear-gradient(135deg, var(--accent), #FF9800);
-            color: #000;
-            border: none;
-            padding: 16px;
-            border-radius: 14px;
-            font-family: 'Khand';
-            font-size: 22px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s;
-            margin-top: 10px;
-        }
+#post-canvas{
+    margin-top:24px;
+    width:100%;
+    aspect-ratio:1/1;
+    background:#222;
+    border-radius:16px;
+    overflow:hidden;
+    position:relative;
+}
 
-        .main-btn:active { transform: scale(0.97); }
+#user-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center top;
+    display:none;
+}
 
-        /* --- Dynamic Preview Section --- */
-        #render-area {
-            margin-top: 30px;
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-            background: #000;
-            display: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+.overlay{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    padding:18px;
+    display:none;
+}
 
-        #output-image { width: 100%; display: block; }
+.overlay.dark{
+    background:rgba(0,0,0,0.75);
+}
 
-        .glass-box {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 20px;
-            box-sizing: border-box;
-            border-top: 1px solid rgba(255,255,255,0.15);
-        }
+.overlay.gradient{
+    background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);
+}
 
-        .news-headline {
-            color: var(--danger);
-            font-family: 'Khand';
-            font-size: 30px;
-            line-height: 1.1;
-            margin-bottom: 8px;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
+.headline{
+    font-family:'Khand','Noto Sans Devanagari','Noto Nastaliq Urdu',sans-serif;
+    font-size:32px;
+    line-height:1.1;
+    max-height:3.3em;
+    overflow:hidden;
+    display:-webkit-box;
+    -webkit-line-clamp:3;
+    -webkit-box-orient:vertical;
+}
 
-        .news-details {
-            color: #F0F0F0;
-            font-size: 16px;
-            line-height: 1.5;
-            font-weight: 400;
-        }
+.desc{
+    font-size:15px;
+    color:#ddd;
+    max-height:4.5em;
+    overflow:hidden;
+}
 
-        .watermark {
-            margin-top: 12px;
-            font-size: 12px;
-            color: rgba(255,255,255,0.4);
-            text-align: right;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 8px;
-        }
+.watermark{
+    margin-top:10px;
+    font-size:12px;
+    color:var(--accent);
+    text-align:right;
+}
 
-        .save-btn {
-            background: #2E7D32;
-            color: white;
-            padding: 16px;
-            border-radius: 14px;
-            font-weight: 600;
-            text-align: center;
-            margin-top: 15px;
-            cursor: pointer;
-            display: none;
-            border: none;
-            width: 100%;
-            font-size: 16px;
-        }
-    </style>
+#saveBtn{
+    display:none;
+    margin-top:14px;
+    background:#27ae60;
+    color:#fff;
+}
+</style>
 </head>
+
 <body>
+<div class="app-card">
 
-<div class="app-container">
-    <header>
-        <h1>🎬 Viral Post Creator Pro</h1>
-    </header>
+<h1>Post Creator Pro</h1>
 
-    <div class="form-section">
-        <div class="input-group">
-            <label>1. बैकग्राउंड फोटो</label>
-            <input type="file" id="fileInput" accept="image/*">
-        </div>
+<label>Photo</label>
+<input type="file" id="imageInput" accept="image/*">
 
-        <div class="input-group">
-            <label>2. मुख्य हेडलाइन (Impact Headline)</label>
-            <input type="text" id="headIn" placeholder="शाहरुख खान ने किया बड़ा खुलासा...">
-        </div>
+<label>Headline</label>
+<input id="headText">
 
-        <div class="input-group">
-            <label>3. खबर का विवरण (The Content)</label>
-            <textarea id="descIn" rows="3" placeholder="पूरी जानकारी यहाँ लिखें..."></textarea>
-        </div>
+<label>Description</label>
+<textarea id="descText" rows="3"></textarea>
 
-        <div class="input-group">
-            <label>4. आपका ब्रांड/हैंडल</label>
-            <input type="text" id="handleIn" value="@baatmi_point">
-        </div>
+<label>Font Size</label>
+<input type="range" min="26" max="42" value="32" id="fontSize">
 
-        <button class="main-btn" onclick="buildPost()">क्रिएट वायरल पोस्ट ✨</button>
-    </div>
+<label>Overlay Style</label>
+<select id="overlayStyle">
+<option value="dark">Dark</option>
+<option value="gradient">Gradient</option>
+</select>
 
-    <!-- Generated Content -->
-    <div id="render-area">
-        <img id="output-image" src="">
-        <div class="glass-box">
-            <div id="target-head" class="news-headline"></div>
-            <div id="target-desc" class="news-details"></div>
-            <div id="target-handle" class="watermark"></div>
-        </div>
-    </div>
+<label>Handle</label>
+<input id="handleText" value="@yourbrand">
 
-    <button id="saveBtn" class="save-btn" onclick="exportImage()">गैलरी में सेव करें 📥</button>
+<button class="btn" onclick="createPost()">Create Post</button>
+
+<div id="post-canvas">
+<img id="user-img">
+<div id="overlay" class="overlay dark">
+<div id="out-head" class="headline"></div>
+<div id="out-desc" class="desc"></div>
+<div id="out-handle" class="watermark"></div>
+</div>
+</div>
+
+<button id="saveBtn" class="btn" onclick="savePost()">Save Image</button>
+
 </div>
 
 <script>
-    function buildPost() {
-        const file = document.getElementById('fileInput').files[0];
-        const h = document.getElementById('headIn').value;
-        const d = document.getElementById('descIn').value;
-        const hn = document.getElementById('handleIn').value;
+function createPost(){
+const file=imageInput.files[0];
+if(!file)return alert("Photo required");
 
-        if (!file) { alert("कृपया फोटो चुनें!"); return; }
-        if (!h || !d) { alert("दोनों कॉलम भरना ज़रूरी है!"); return; }
+const reader=new FileReader();
+reader.onload=e=>{
+user-img.src=e.target.result;
+user-img.onload=()=>{
+user-img.style.display="block";
+overlay.style.display="block";
 
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = document.getElementById('output-image');
-            img.src = e.target.result;
+out-head.innerText=headText.value;
+out-desc.innerText=descText.value;
+out-head.style.fontSize=fontSize.value+"px";
 
-            img.onload = () => {
-                document.getElementById('target-head').innerText = h;
-                document.getElementById('target-desc').innerText = d;
-                document.getElementById('target-handle').innerText = hn;
+overlay.className="overlay "+overlayStyle.value;
 
-                document.getElementById('render-area').style.display = 'block';
-                document.getElementById('saveBtn').style.display = 'block';
+const h=handleText.value.trim();
+out-handle.innerText=h?h:"@yourbrand";
 
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            };
-        }
-        reader.readAsDataURL(file);
-    }
+saveBtn.style.display="block";
+};
+};
+reader.readAsDataURL(file);
+}
 
-    async function exportImage() {
-        const area = document.getElementById('render-area');
-        const btn = document.getElementById('saveBtn');
-        
-        btn.innerText = "प्रोसेसिंग...";
-        btn.style.opacity = "0.7";
-
-        try {
-            const canvas = await html2canvas(area, {
-                scale: 3, // HD Quality
-                useCORS: true,
-                backgroundColor: null,
-                logging: false
-            });
-
-            const link = document.createElement('a');
-            link.download = `ViralPost_${Date.now()}.png`;
-            link.href = canvas.toDataURL("image/png");
-            link.click();
-        } catch (err) {
-            alert("सेव करने में दिक्कत आई, कृपया फिर से कोशिश करें।");
-        } finally {
-            btn.innerText = "गैलरी में सेव करें 📥";
-            btn.style.opacity = "1";
-        }
-    }
+function savePost(){
+saveBtn.disabled=true;
+saveBtn.innerText="Processing...";
+html2canvas(post-canvas,{scale:3,backgroundColor:null}).then(c=>{
+const a=document.createElement("a");
+a.download="post_"+Date.now()+".png";
+a.href=c.toDataURL();
+a.click();
+saveBtn.disabled=false;
+saveBtn.innerText="Save Image";
+});
+}
 </script>
-
 </body>
 </html>
