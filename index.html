@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Post Creator Pro</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Poppins:wght@400;600&family=Noto+Sans+Devanagari&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Poppins:wght@400;600&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 :root{
-  --accent:#ffcc00;
+  --yellow:#ffcc00;
   --bg:#0f0f0f;
   --card:#1a1a1a;
   --input:#262626;
@@ -37,9 +37,11 @@ body{
 h1{
   text-align:center;
   font-family:'Khand';
-  color:var(--accent);
+  color:var(--yellow);
   margin-bottom:20px;
 }
+
+/* ---------- FORM ---------- */
 
 label{
   font-size:11px;
@@ -66,17 +68,19 @@ button{
   border-radius:14px;
   font-family:'Khand';
   font-size:22px;
-  background:linear-gradient(135deg,var(--accent),#f39c12);
+  background:linear-gradient(135deg,var(--yellow),#f39c12);
   color:#000;
   cursor:pointer;
 }
+
+/* ---------- CANVAS ---------- */
 
 #canvas{
   margin-top:24px;
   width:100%;
   aspect-ratio:1/1;
   background:#222;
-  border-radius:16px;
+  border-radius:18px;
   overflow:hidden;
   position:relative;
 }
@@ -89,47 +93,58 @@ button{
   display:none;
 }
 
+/* ---------- OVERLAY ---------- */
+
 .overlay{
   position:absolute;
   bottom:0;
+  left:0;
   width:100%;
-  padding:18px;
+  height:55%;
+  padding:20px;
   display:none;
-}
-
-.overlay.dark{
   background:rgba(0,0,0,0.75);
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
 }
 
-.overlay.gradient{
-  background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);
-}
+/* ---------- TEXT ---------- */
 
 .headline{
-  font-family:'Khand','Noto Sans Devanagari','Noto Nastaliq Urdu',sans-serif;
+  font-family:'Khand','Noto Sans Devanagari',sans-serif;
   font-size:32px;
-  line-height:1.1;
-  max-height:3.3em;
-  overflow:hidden;
-  display:-webkit-box;
-  -webkit-line-clamp:3;
-  -webkit-box-orient:vertical;
+  line-height:1.15;
+  margin-bottom:10px;
+  color:#fff;
+  text-shadow:0 2px 6px rgba(0,0,0,0.6);
 }
 
 .desc{
-  margin-top:6px;
   font-size:15px;
-  color:#ddd;
-  max-height:4.5em;
-  overflow:hidden;
+  line-height:1.4;
+  color:#eaeaea;
+  text-shadow:0 1px 4px rgba(0,0,0,0.5);
 }
 
-.handle{
-  margin-top:10px;
-  text-align:right;
-  font-size:12px;
-  color:var(--accent);
+/* Highlighted text */
+.hl{
+  color:var(--yellow);
 }
+
+/* ---------- WATERMARK ---------- */
+
+.handle{
+  position:absolute;
+  bottom:10px;
+  right:14px;
+  font-size:12px;
+  font-weight:600;
+  color:var(--yellow);
+  text-shadow:0 1px 3px rgba(0,0,0,0.6);
+}
+
+/* ---------- SAVE ---------- */
 
 #saveBtn{
   margin-top:14px;
@@ -148,8 +163,8 @@ button{
 <label>Photo</label>
 <input type="file" id="imageInput" accept="image/*">
 
-<label>Headline</label>
-<input id="headlineInput">
+<label>Headline ( *highlight* करने के लिए )</label>
+<input id="headlineInput" placeholder="संजय राऊत ने *भाजपा* को घेरा">
 
 <label>Description</label>
 <textarea id="descInput" rows="3"></textarea>
@@ -157,20 +172,14 @@ button{
 <label>Font Size</label>
 <input type="range" id="fontSize" min="26" max="42" value="32">
 
-<label>Overlay Style</label>
-<select id="overlayStyle">
-  <option value="dark">Dark</option>
-  <option value="gradient">Gradient</option>
-</select>
-
 <label>Handle</label>
-<input id="handleInput" value="@yourbrand">
+<input id="handleInput" value="@baatmipoint">
 
 <button onclick="createPost()">Create Post</button>
 
 <div id="canvas">
   <img id="photo">
-  <div id="overlay" class="overlay dark">
+  <div id="overlay" class="overlay">
     <div id="outHeadline" class="headline"></div>
     <div id="outDesc" class="desc"></div>
     <div id="outHandle" class="handle"></div>
@@ -182,6 +191,10 @@ button{
 </div>
 
 <script>
+function formatText(text){
+  return text.replace(/\*(.*?)\*/g,'<span class="hl">$1</span>');
+}
+
 function createPost(){
   const file = document.getElementById("imageInput").files[0];
   if(!file){ alert("कृपया फोटो चुनें"); return; }
@@ -192,21 +205,17 @@ function createPost(){
     img.src = e.target.result;
     img.onload = () => {
       img.style.display = "block";
-
-      const overlay = document.getElementById("overlay");
-      overlay.style.display = "block";
-      overlay.className = "overlay " + document.getElementById("overlayStyle").value;
+      document.getElementById("overlay").style.display = "flex";
 
       const h = document.getElementById("outHeadline");
-      h.innerText = document.getElementById("headlineInput").value;
+      h.innerHTML = formatText(document.getElementById("headlineInput").value);
       h.style.fontSize = document.getElementById("fontSize").value + "px";
 
-      document.getElementById("outDesc").innerText =
-        document.getElementById("descInput").value;
+      document.getElementById("outDesc").innerHTML =
+        formatText(document.getElementById("descInput").value);
 
-      const handleVal = document.getElementById("handleInput").value.trim();
       document.getElementById("outHandle").innerText =
-        handleVal !== "" ? handleVal : "@yourbrand";
+        document.getElementById("handleInput").value.trim() || "@baatmipoint";
 
       document.getElementById("saveBtn").style.display = "block";
     };
@@ -219,23 +228,23 @@ function saveImage(){
   btn.disabled = true;
   btn.innerText = "Saving...";
 
-  html2canvas(document.getElementById("canvas"), {
+  html2canvas(document.getElementById("canvas"),{
     scale:3,
     backgroundColor:null
-  }).then(canvas => {
-    canvas.toBlob(blob => {
+  }).then(canvas=>{
+    canvas.toBlob(blob=>{
       const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "Post_" + Date.now() + ".png";
+      const a=document.createElement("a");
+      a.href=url;
+      a.download="Post_"+Date.now()+".png";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      btn.disabled = false;
-      btn.innerText = "Save Image";
-    }, "image/png");
+      btn.disabled=false;
+      btn.innerText="Save Image";
+    });
   });
 }
 </script>
