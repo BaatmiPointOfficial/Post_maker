@@ -3,13 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Post Creator Pro v1.1</title>
+<title>Post Creator Pro</title>
 
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Poppins:wght@400;600&family=Noto+Sans+Devanagari&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+
+<!-- html2canvas -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-:root {
+:root{
     --accent:#ffcc00;
     --bg:#0f0f0f;
     --card:#1a1a1a;
@@ -17,61 +20,62 @@
 }
 
 body{
+    margin:0;
+    padding:20px;
     background:var(--bg);
     color:#fff;
     font-family:'Poppins',sans-serif;
-    margin:0;
-    padding:20px;
     display:flex;
     justify-content:center;
 }
 
-.app-card{
+.app{
     width:100%;
     max-width:480px;
     background:var(--card);
-    padding:24px;
+    padding:22px;
     border-radius:22px;
 }
 
 h1{
+    text-align:center;
     font-family:'Khand';
     color:var(--accent);
-    text-align:center;
     margin-bottom:20px;
 }
 
 label{
     font-size:11px;
-    color:#888;
+    color:#aaa;
     text-transform:uppercase;
     margin-bottom:6px;
     display:block;
 }
 
-input,textarea{
+input, textarea, select{
     width:100%;
     padding:14px;
+    margin-bottom:14px;
     background:var(--input);
     border:1px solid #333;
     border-radius:12px;
     color:#fff;
-    margin-bottom:14px;
+    box-sizing:border-box;
 }
 
-.btn{
+button{
     width:100%;
     padding:16px;
     border:none;
     border-radius:14px;
-    font-size:20px;
     font-family:'Khand';
+    font-size:22px;
     background:linear-gradient(135deg,var(--accent),#f39c12);
-    cursor:pointer;
     color:#000;
+    cursor:pointer;
 }
 
-#post-canvas{
+#canvas{
     margin-top:24px;
     width:100%;
     aspect-ratio:1/1;
@@ -81,7 +85,7 @@ input,textarea{
     position:relative;
 }
 
-#user-img{
+#photo{
     width:100%;
     height:100%;
     object-fit:cover;
@@ -117,30 +121,32 @@ input,textarea{
 }
 
 .desc{
+    margin-top:6px;
     font-size:15px;
     color:#ddd;
     max-height:4.5em;
     overflow:hidden;
 }
 
-.watermark{
+.handle{
     margin-top:10px;
+    text-align:right;
     font-size:12px;
     color:var(--accent);
-    text-align:right;
 }
 
 #saveBtn{
-    display:none;
     margin-top:14px;
     background:#27ae60;
     color:#fff;
+    display:none;
 }
 </style>
 </head>
 
 <body>
-<div class="app-card">
+
+<div class="app">
 
 <h1>Post Creator Pro</h1>
 
@@ -148,77 +154,96 @@ input,textarea{
 <input type="file" id="imageInput" accept="image/*">
 
 <label>Headline</label>
-<input id="headText">
+<input type="text" id="headlineInput">
 
 <label>Description</label>
-<textarea id="descText" rows="3"></textarea>
+<textarea id="descInput" rows="3"></textarea>
 
 <label>Font Size</label>
-<input type="range" min="26" max="42" value="32" id="fontSize">
+<input type="range" id="fontSize" min="26" max="42" value="32">
 
 <label>Overlay Style</label>
 <select id="overlayStyle">
-<option value="dark">Dark</option>
-<option value="gradient">Gradient</option>
+    <option value="dark">Dark</option>
+    <option value="gradient">Gradient</option>
 </select>
 
 <label>Handle</label>
-<input id="handleText" value="@yourbrand">
+<input type="text" id="handleInput" value="@yourbrand">
 
-<button class="btn" onclick="createPost()">Create Post</button>
+<button onclick="createPost()">Create Post</button>
 
-<div id="post-canvas">
-<img id="user-img">
-<div id="overlay" class="overlay dark">
-<div id="out-head" class="headline"></div>
-<div id="out-desc" class="desc"></div>
-<div id="out-handle" class="watermark"></div>
+<div id="canvas">
+    <img id="photo">
+    <div id="overlay" class="overlay dark">
+        <div id="outHeadline" class="headline"></div>
+        <div id="outDesc" class="desc"></div>
+        <div id="outHandle" class="handle"></div>
+    </div>
 </div>
-</div>
 
-<button id="saveBtn" class="btn" onclick="savePost()">Save Image</button>
+<button id="saveBtn" onclick="saveImage()">Save Image</button>
 
 </div>
 
 <script>
 function createPost(){
-const file=imageInput.files[0];
-if(!file)return alert("Photo required");
+    const fileInput = document.getElementById("imageInput");
+    const file = fileInput.files[0];
 
-const reader=new FileReader();
-reader.onload=e=>{
-user-img.src=e.target.result;
-user-img.onload=()=>{
-user-img.style.display="block";
-overlay.style.display="block";
+    if(!file){
+        alert("कृपया फोटो चुनें");
+        return;
+    }
 
-out-head.innerText=headText.value;
-out-desc.innerText=descText.value;
-out-head.style.fontSize=fontSize.value+"px";
+    const reader = new FileReader();
+    reader.onload = function(e){
+        const img = document.getElementById("photo");
+        img.src = e.target.result;
 
-overlay.className="overlay "+overlayStyle.value;
+        img.onload = function(){
+            img.style.display = "block";
 
-const h=handleText.value.trim();
-out-handle.innerText=h?h:"@yourbrand";
+            const overlay = document.getElementById("overlay");
+            overlay.style.display = "block";
+            overlay.className = "overlay " + document.getElementById("overlayStyle").value;
 
-saveBtn.style.display="block";
-};
-};
-reader.readAsDataURL(file);
+            const headline = document.getElementById("outHeadline");
+            headline.innerText = document.getElementById("headlineInput").value;
+            headline.style.fontSize = document.getElementById("fontSize").value + "px";
+
+            document.getElementById("outDesc").innerText =
+                document.getElementById("descInput").value;
+
+            const handleVal = document.getElementById("handleInput").value.trim();
+            document.getElementById("outHandle").innerText =
+                handleVal !== "" ? handleVal : "@yourbrand";
+
+            document.getElementById("saveBtn").style.display = "block";
+        };
+    };
+    reader.readAsDataURL(file);
 }
 
-function savePost(){
-saveBtn.disabled=true;
-saveBtn.innerText="Processing...";
-html2canvas(post-canvas,{scale:3,backgroundColor:null}).then(c=>{
-const a=document.createElement("a");
-a.download="post_"+Date.now()+".png";
-a.href=c.toDataURL();
-a.click();
-saveBtn.disabled=false;
-saveBtn.innerText="Save Image";
-});
+function saveImage(){
+    const btn = document.getElementById("saveBtn");
+    btn.disabled = true;
+    btn.innerText = "Processing...";
+
+    html2canvas(document.getElementById("canvas"),{
+        scale:3,
+        backgroundColor:null
+    }).then(canvas=>{
+        const a = document.createElement("a");
+        a.download = "post_" + Date.now() + ".png";
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+
+        btn.disabled = false;
+        btn.innerText = "Save Image";
+    });
 }
 </script>
+
 </body>
 </html>
