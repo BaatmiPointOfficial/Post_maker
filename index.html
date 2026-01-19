@@ -3,189 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Post Maker</title>
+    <title>Viral Post Creator - Glass Edition</title>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     
-    <!-- Html2Canvas Library -->
+    <!-- html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
-        :root {
-            --primary-color: #2ecc71;
-            --secondary-color: #3498db;
-            --dark-bg: #2c3e50;
-        }
-
         body {
-            font-family: 'Poppins', 'Mukta', sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 20px;
+            background-color: #121212;
+            color: white;
+            font-family: 'Poppins', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 20px;
         }
 
         .container {
-            max-width: 600px;
-            width: 100%;
-            background: white;
+            background-color: #1e1e1e;
             padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        h2 { text-align: center; color: var(--dark-bg); margin-bottom: 20px; }
+        h2 { text-align: center; color: #ffcc00; font-family: 'Khand'; font-size: 26px; }
 
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; }
+        .input-group { margin-bottom: 12px; }
+        label { font-size: 13px; color: #888; display: block; margin-bottom: 4px; }
+        
         input, textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-family: 'Mukta';
-        }
-
-        /* पोस्ट का डिज़ाइन (Preview Area) */
-        #post-preview {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            background: linear-gradient(45deg, #ed213a, #93291e);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            box-sizing: border-box;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-
-        #preview-text {
-            font-size: 24px;
-            font-weight: 700;
-            line-height: 1.4;
-            margin: 0;
-        }
-
-        .footer-tag {
-            position: absolute;
-            bottom: 15px;
-            font-size: 14px;
-            opacity: 0.8;
-            border-top: 1px solid rgba(255,255,255,0.3);
-            padding-top: 5px;
-            width: 80%;
-        }
-
-        /* बटन्स */
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        button {
             padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
+            background: #2c2c2c;
+            border: 1px solid #444;
+            border-radius: 10px;
             color: white;
+            box-sizing: border-box;
         }
 
-        .btn-download { background-color: var(--primary-color); }
-        .btn-share { background-color: var(--secondary-color); }
-        button:hover { opacity: 0.9; transform: scale(1.02); }
+        .btn-create {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #ffcc00, #ff9900);
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-family: 'Khand';
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
 
-        @media (max-width: 480px) {
-            .button-group { grid-template-columns: 1fr; }
+        /* --- यहाँ से पोस्ट का नया ब्लर डिज़ाइन शुरू होता है --- */
+        
+        #post-wrapper {
+            margin-top: 25px;
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 15px;
+            overflow: hidden; /* ताकि ब्लर बाहर न निकले */
+            display: none;
+            background: white;
+        }
+
+        #output-image {
+            width: 100%;
+            display: block;
+        }
+
+        /* पारदर्शी और ब्लर वाला बॉक्स */
+        .glass-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.6); /* हल्का काला और पारदर्शी */
+            backdrop-filter: blur(10px); /* पीछे के फोटो को धुंधला करने के लिए */
+            -webkit-backdrop-filter: blur(10px);
+            padding: 15px;
+            color: white;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .line-1 {
+            color: #ff3333; /* न्यूज़ जैसा लाल रंग */
+            font-family: 'Khand';
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .line-2 {
+            color: #ffcc00; /* आकर्षक पीला रंग */
+            font-family: 'Khand';
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .desc-text {
+            font-size: 14px;
+            line-height: 1.4;
+            color: #eee;
+        }
+
+        .handle-text {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 10px;
+            text-align: right;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 5px;
+        }
+
+        .btn-download {
+            width: 100%;
+            padding: 15px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            margin-top: 15px;
+            cursor: pointer;
+            display: none;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Post Maker v2</h2>
+    <h2>🎬 Viral Post Creator</h2>
 
     <div class="input-group">
-        <label>अपना संदेश लिखें:</label>
-        <textarea id="userInput" rows="3" placeholder="यहाँ टाइप करें..." oninput="updatePreview()"></textarea>
+        <label>1. फोटो अपलोड करें</label>
+        <input type="file" id="imageInput" accept="image/*">
     </div>
 
     <div class="input-group">
-        <label>बैकग्राउंड रंग चुनें:</label>
-        <input type="color" id="bgColor" value="#ed213a" oninput="updatePreview()">
+        <label>2. मुख्य हेडलाइन (लाल रंग में आएगी)</label>
+        <input type="text" id="in1" placeholder="जैसे: ब्रेकिंग न्यूज़...">
     </div>
 
-    <!-- पोस्ट प्रीव्यू -->
-    <div id="post-preview">
-        <p id="preview-text">आपका संदेश यहाँ दिखेगा</p>
-        <div class="footer-tag" id="footer-text">Baatmi Point Official</div>
+    <div class="input-group">
+        <label>3. उप-हेडलाइन (पीले रंग में आएगी)</label>
+        <input type="text" id="in2" placeholder="जैसे: बड़ी जानकारी यहाँ...">
     </div>
 
-    <!-- एक्शन बटन्स -->
-    <div class="button-group">
-        <button class="btn-download" onclick="downloadPost()">Download (HD)</button>
-        <button class="btn-share" onclick="sharePost()">Share/Save to Gallery</button>
+    <div class="input-group">
+        <label>4. पूरा विवरण</label>
+        <textarea id="inDesc" rows="3" placeholder="खबर का विवरण लिखें..."></textarea>
     </div>
+
+    <div class="input-group">
+        <label>5. सोशल मीडिया हैंडल</label>
+        <input type="text" id="inHandle" placeholder="@baatmi_point">
+    </div>
+
+    <button class="btn-create" onclick="createPost()">पोस्ट तैयार करें ✨</button>
+
+    <!-- पोस्ट का डिज़ाइन -->
+    <div id="post-wrapper">
+        <img id="output-image" src="">
+        <div class="glass-overlay">
+            <div id="out-l1" class="line-1"></div>
+            <div id="out-l2" class="line-2"></div>
+            <div id="out-desc" class="desc-text"></div>
+            <div id="out-handle" class="handle-text"></div>
+        </div>
+    </div>
+
+    <button id="dlBtn" class="btn-download" onclick="downloadImage()">गैलरी में सेव करें ⬇️</button>
 </div>
 
 <script>
-    // प्रीव्यू को तुरंत अपडेट करने के लिए
-    function updatePreview() {
-        const text = document.getElementById('userInput').value;
-        const color = document.getElementById('bgColor').value;
-        
-        document.getElementById('preview-text').innerText = text || "आपका संदेश यहाँ दिखेगा";
-        document.getElementById('post-preview').style.background = color;
+    function createPost() {
+        const file = document.getElementById('imageInput').files[0];
+        if (!file) { alert("फोटो चुनें!"); return; }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('output-image').src = e.target.result;
+            document.getElementById('out-l1').innerText = document.getElementById('in1').value;
+            document.getElementById('out-l2').innerText = document.getElementById('in2').value;
+            document.getElementById('out-desc').innerText = document.getElementById('inDesc').value;
+            document.getElementById('out-handle').innerText = document.getElementById('inHandle').value;
+
+            document.getElementById('post-wrapper').style.display = 'block';
+            document.getElementById('dlBtn').style.display = 'block';
+        }
+        reader.readAsDataURL(file);
     }
 
-    // हाई क्वालिटी डाउनलोड (PC के लिए बेस्ट)
-    async function downloadPost() {
-        const postArea = document.getElementById("post-preview");
-        const canvas = await html2canvas(postArea, {
-            scale: 3, // क्वालिटी 3 गुना बढ़ा दी
-            useCORS: true,
-            logging: false
-        });
-        
-        const link = document.createElement('a');
-        link.download = 'Baatmi_Point_Post.png';
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-    }
-
-    // मोबाइल गैलरी फिक्स (Sharing API)
-    async function sharePost() {
-        const postArea = document.getElementById("post-preview");
-        const canvas = await html2canvas(postArea, { scale: 3 });
-        
-        canvas.toBlob(async (blob) => {
-            const file = new File([blob], 'post.png', { type: 'image/png' });
-            
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Post Maker',
-                        text: 'Created via Baatmi Point',
-                    });
-                } catch (err) {
-                    console.error("Error sharing:", err);
-                }
-            } else {
-                alert("आपका ब्राउज़र शेयरिंग सपोर्ट नहीं करता। फोटो डाउनलोड करें और गैलरी में देखें।");
-            }
+    function downloadImage() {
+        const post = document.getElementById('post-wrapper');
+        html2canvas(post, { scale: 3, useCORS: true }).then(canvas => {
+            const a = document.createElement('a');
+            a.download = 'ViralPost_Blur.png';
+            a.href = canvas.toDataURL();
+            a.click();
         });
     }
 </script>
