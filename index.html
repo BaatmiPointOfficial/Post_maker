@@ -1,216 +1,253 @@
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viral Post Creator - Glass Edition</title>
+    <title>Viral Post Creator PRO</title>
     
-    <!-- Google Fonts -->
+    <!-- Premium Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    
-    <!-- html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
+        :root {
+            --accent: #FFC107;
+            --bg: #0F0F0F;
+            --card: #1A1A1A;
+            --input: #252525;
+            --danger: #FF3D00;
+        }
+
         body {
-            background-color: #121212;
-            color: white;
+            background-color: var(--bg);
+            color: #FFFFFF;
             font-family: 'Poppins', sans-serif;
+            margin: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
             padding: 20px;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .container {
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 20px;
+        .app-container {
             width: 100%;
-            max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 480px;
+            background: var(--card);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
 
-        h2 { text-align: center; color: #ffcc00; font-family: 'Khand'; font-size: 26px; }
+        header { text-align: center; margin-bottom: 25px; }
+        header h1 { 
+            font-family: 'Khand'; 
+            font-size: 32px; 
+            margin: 0; 
+            color: var(--accent); 
+            letter-spacing: 1px;
+        }
 
-        .input-group { margin-bottom: 12px; }
-        label { font-size: 13px; color: #888; display: block; margin-bottom: 4px; }
-        
+        .form-section { display: flex; flex-direction: column; gap: 16px; }
+
+        .input-group label { font-size: 12px; color: #888; font-weight: 600; margin-bottom: 6px; display: block; text-transform: uppercase; }
+
         input, textarea {
             width: 100%;
-            padding: 12px;
-            background: #2c2c2c;
-            border: 1px solid #444;
-            border-radius: 10px;
+            background: var(--input);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 14px;
             color: white;
+            font-size: 15px;
+            outline: none;
+            transition: border 0.3s;
             box-sizing: border-box;
         }
 
-        .btn-create {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, #ffcc00, #ff9900);
+        input:focus { border-color: var(--accent); }
+
+        .main-btn {
+            background: linear-gradient(135deg, var(--accent), #FF9800);
+            color: #000;
             border: none;
-            border-radius: 12px;
-            font-weight: bold;
+            padding: 16px;
+            border-radius: 14px;
             font-family: 'Khand';
-            font-size: 18px;
+            font-size: 22px;
+            font-weight: 700;
             cursor: pointer;
+            transition: transform 0.2s;
             margin-top: 10px;
         }
 
-        /* --- यहाँ से पोस्ट का नया ब्लर डिज़ाइन शुरू होता है --- */
-        
-        #post-wrapper {
-            margin-top: 25px;
+        .main-btn:active { transform: scale(0.97); }
+
+        /* --- Dynamic Preview Section --- */
+        #render-area {
+            margin-top: 30px;
+            border-radius: 16px;
+            overflow: hidden;
             position: relative;
-            width: 100%;
-            max-width: 400px;
-            border-radius: 15px;
-            overflow: hidden; /* ताकि ब्लर बाहर न निकले */
+            background: #000;
             display: none;
-            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        #output-image {
-            width: 100%;
-            display: block;
-        }
+        #output-image { width: 100%; display: block; }
 
-        /* पारदर्शी और ब्लर वाला बॉक्स */
-        .glass-overlay {
+        .glass-box {
             position: absolute;
             bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.6); /* हल्का काला और पारदर्शी */
-            backdrop-filter: blur(10px); /* पीछे के फोटो को धुंधला करने के लिए */
-            -webkit-backdrop-filter: blur(10px);
-            padding: 15px;
-            color: white;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 20px;
+            box-sizing: border-box;
+            border-top: 1px solid rgba(255,255,255,0.15);
         }
 
-        .line-1 {
-            color: #ff3333; /* न्यूज़ जैसा लाल रंग */
+        .news-headline {
+            color: var(--danger);
             font-family: 'Khand';
-            font-size: 26px;
-            font-weight: 700;
+            font-size: 30px;
             line-height: 1.1;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 8px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        .line-2 {
-            color: #ffcc00; /* आकर्षक पीला रंग */
-            font-family: 'Khand';
-            font-size: 19px;
-            font-weight: 600;
-            margin-bottom: 10px;
+        .news-details {
+            color: #F0F0F0;
+            font-size: 16px;
+            line-height: 1.5;
+            font-weight: 400;
         }
 
-        .desc-text {
-            font-size: 14px;
-            line-height: 1.4;
-            color: #eee;
-        }
-
-        .handle-text {
+        .watermark {
+            margin-top: 12px;
             font-size: 12px;
-            color: rgba(255,255,255,0.5);
-            margin-top: 10px;
+            color: rgba(255,255,255,0.4);
             text-align: right;
             border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 5px;
+            padding-top: 8px;
         }
 
-        .btn-download {
-            width: 100%;
-            padding: 15px;
-            background: #28a745;
+        .save-btn {
+            background: #2E7D32;
             color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: bold;
+            padding: 16px;
+            border-radius: 14px;
+            font-weight: 600;
+            text-align: center;
             margin-top: 15px;
             cursor: pointer;
             display: none;
+            border: none;
+            width: 100%;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>🎬 Viral Post Creator</h2>
+<div class="app-container">
+    <header>
+        <h1>🎬 Viral Post Creator Pro</h1>
+    </header>
 
-    <div class="input-group">
-        <label>1. फोटो अपलोड करें</label>
-        <input type="file" id="imageInput" accept="image/*">
+    <div class="form-section">
+        <div class="input-group">
+            <label>1. बैकग्राउंड फोटो</label>
+            <input type="file" id="fileInput" accept="image/*">
+        </div>
+
+        <div class="input-group">
+            <label>2. मुख्य हेडलाइन (Impact Headline)</label>
+            <input type="text" id="headIn" placeholder="शाहरुख खान ने किया बड़ा खुलासा...">
+        </div>
+
+        <div class="input-group">
+            <label>3. खबर का विवरण (The Content)</label>
+            <textarea id="descIn" rows="3" placeholder="पूरी जानकारी यहाँ लिखें..."></textarea>
+        </div>
+
+        <div class="input-group">
+            <label>4. आपका ब्रांड/हैंडल</label>
+            <input type="text" id="handleIn" value="@baatmi_point">
+        </div>
+
+        <button class="main-btn" onclick="buildPost()">क्रिएट वायरल पोस्ट ✨</button>
     </div>
 
-    <div class="input-group">
-        <label>2. मुख्य हेडलाइन (लाल रंग में आएगी)</label>
-        <input type="text" id="in1" placeholder="जैसे: ब्रेकिंग न्यूज़...">
-    </div>
-
-    <div class="input-group">
-        <label>3. उप-हेडलाइन (पीले रंग में आएगी)</label>
-        <input type="text" id="in2" placeholder="जैसे: बड़ी जानकारी यहाँ...">
-    </div>
-
-    <div class="input-group">
-        <label>4. पूरा विवरण</label>
-        <textarea id="inDesc" rows="3" placeholder="खबर का विवरण लिखें..."></textarea>
-    </div>
-
-    <div class="input-group">
-        <label>5. सोशल मीडिया हैंडल</label>
-        <input type="text" id="inHandle" placeholder="@baatmi_point">
-    </div>
-
-    <button class="btn-create" onclick="createPost()">पोस्ट तैयार करें ✨</button>
-
-    <!-- पोस्ट का डिज़ाइन -->
-    <div id="post-wrapper">
+    <!-- Generated Content -->
+    <div id="render-area">
         <img id="output-image" src="">
-        <div class="glass-overlay">
-            <div id="out-l1" class="line-1"></div>
-            <div id="out-l2" class="line-2"></div>
-            <div id="out-desc" class="desc-text"></div>
-            <div id="out-handle" class="handle-text"></div>
+        <div class="glass-box">
+            <div id="target-head" class="news-headline"></div>
+            <div id="target-desc" class="news-details"></div>
+            <div id="target-handle" class="watermark"></div>
         </div>
     </div>
 
-    <button id="dlBtn" class="btn-download" onclick="downloadImage()">गैलरी में सेव करें ⬇️</button>
+    <button id="saveBtn" class="save-btn" onclick="exportImage()">गैलरी में सेव करें 📥</button>
 </div>
 
 <script>
-    function createPost() {
-        const file = document.getElementById('imageInput').files[0];
-        if (!file) { alert("फोटो चुनें!"); return; }
+    function buildPost() {
+        const file = document.getElementById('fileInput').files[0];
+        const h = document.getElementById('headIn').value;
+        const d = document.getElementById('descIn').value;
+        const hn = document.getElementById('handleIn').value;
+
+        if (!file) { alert("कृपया फोटो चुनें!"); return; }
+        if (!h || !d) { alert("दोनों कॉलम भरना ज़रूरी है!"); return; }
 
         const reader = new FileReader();
         reader.onload = function(e) {
-            document.getElementById('output-image').src = e.target.result;
-            document.getElementById('out-l1').innerText = document.getElementById('in1').value;
-            document.getElementById('out-l2').innerText = document.getElementById('in2').value;
-            document.getElementById('out-desc').innerText = document.getElementById('inDesc').value;
-            document.getElementById('out-handle').innerText = document.getElementById('inHandle').value;
+            const img = document.getElementById('output-image');
+            img.src = e.target.result;
 
-            document.getElementById('post-wrapper').style.display = 'block';
-            document.getElementById('dlBtn').style.display = 'block';
+            img.onload = () => {
+                document.getElementById('target-head').innerText = h;
+                document.getElementById('target-desc').innerText = d;
+                document.getElementById('target-handle').innerText = hn;
+
+                document.getElementById('render-area').style.display = 'block';
+                document.getElementById('saveBtn').style.display = 'block';
+
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            };
         }
         reader.readAsDataURL(file);
     }
 
-    function downloadImage() {
-        const post = document.getElementById('post-wrapper');
-        html2canvas(post, { scale: 3, useCORS: true }).then(canvas => {
-            const a = document.createElement('a');
-            a.download = 'ViralPost_Blur.png';
-            a.href = canvas.toDataURL();
-            a.click();
-        });
+    async function exportImage() {
+        const area = document.getElementById('render-area');
+        const btn = document.getElementById('saveBtn');
+        
+        btn.innerText = "प्रोसेसिंग...";
+        btn.style.opacity = "0.7";
+
+        try {
+            const canvas = await html2canvas(area, {
+                scale: 3, // HD Quality
+                useCORS: true,
+                backgroundColor: null,
+                logging: false
+            });
+
+            const link = document.createElement('a');
+            link.download = `ViralPost_${Date.now()}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        } catch (err) {
+            alert("सेव करने में दिक्कत आई, कृपया फिर से कोशिश करें।");
+        } finally {
+            btn.innerText = "गैलरी में सेव करें 📥";
+            btn.style.opacity = "1";
+        }
     }
 </script>
 
