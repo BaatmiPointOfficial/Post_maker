@@ -1,221 +1,137 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Baatmi Point – Post Maker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PostMaker Pro - Baatmi Point Creator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root { --accent: #ffcc00; --bg: #0f172a; --card: #1e293b; }
+        body { font-family: 'Mukta', sans-serif; background: var(--bg); color: white; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
+        .header { background: rgba(30, 41, 59, 0.9); width: 100%; padding: 15px; text-align: center; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px); }
+        .main { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; padding: 30px; max-width: 1200px; width: 100%; box-sizing: border-box; }
+        .editor { background: var(--card); padding: 25px; border-radius: 20px; width: 100%; max-width: 450px; border: 1px solid #334155; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #94a3b8; font-size: 14px; }
+        input, textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: white; font-size: 16px; box-sizing: border-box; }
+        .btn { background: var(--accent); color: black; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 18px; width: 100%; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 204, 0, 0.4); }
+        
+        #render-container { position: absolute; left: -9999px; top: 0; overflow: hidden; }
+        #render-target { width: 1000px; height: 1000px; background: #000; border: 15px solid white; position: relative; }
+        .post-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; }
+        .post-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 65%; background: linear-gradient(transparent, rgba(0,0,0,0.98)); }
+        .post-content { position: absolute; bottom: 100px; left: 0; width: 100%; padding: 0 50px; text-align: center; box-sizing: border-box; z-index: 2; }
+        .post-title { color: var(--accent); font-family: 'Khand', sans-serif; font-size: 80px; margin-bottom: 15px; line-height: 1.1; font-weight: 700; text-transform: uppercase; }
+        .post-desc { color: white; font-family: 'Khand', sans-serif; font-size: 55px; line-height: 1.3; font-weight: 500; }
+        .post-footer { position: absolute; bottom: 35px; width: 100%; text-align: center; color: rgba(255,255,255,0.8); font-size: 38px; z-index: 2; font-weight: bold; letter-spacing: 2px; }
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-<style>
-*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-body{
-  margin:0;
-  padding:15px;
-  font-family: 'Arial', sans-serif;
-  background:#121212;
-  color:#eee;
-}
-.container{
-  max-width:450px;
-  margin:auto;
-  background:#1e1e1e;
-  padding:20px;
-  border-radius:15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-h2{ text-align:center; color:#ffcc00; margin-bottom:20px; }
-label{ display:block; margin-top:12px; font-size:14px; font-weight:bold; color:#bbb; }
-input, textarea{
-  width:100%;
-  padding:12px;
-  margin-top:6px;
-  border-radius:8px;
-  border:1px solid #333;
-  background:#2a2a2a;
-  color:#fff;
-  font-size:16px;
-}
-
-/* Yellow Button Trigger */
-#generateBtn{
-  width:100%;
-  margin-top:20px;
-  padding:15px;
-  border:none;
-  border-radius:10px;
-  background:#ffcc00;
-  color:#000;
-  font-weight:bold;
-  font-size:18px;
-  cursor:pointer;
-}
-#generateBtn:active{ transform:scale(0.96); }
-
-#preview{ margin-top:20px; text-align:center; }
-#finalImage{
-  max-width:100%;
-  border-radius:10px;
-  display:none;
-  border: 2px solid #333;
-}
-#downloadBtn{
-  display:none;
-  margin-top:15px;
-  background:#2ecc71;
-  color:#fff;
-  text-decoration:none;
-  padding:15px;
-  border-radius:10px;
-  font-weight:bold;
-  text-align:center;
-  display: block;
-}
-
-/* 🔑 FIX: OFF-SCREEN RENDERING AREA */
-/* display: none को हटाकर position: absolute किया गया है */
-#postCanvas{
-  position:absolute;
-  left:-5000px; 
-  top:0;
-  width:1080px; 
-  height:1080px;
-  background:#000;
-  overflow:hidden;
-}
-#canvasWrap{
-  position:relative;
-  width:1080px;
-  height:1080px;
-}
-#userImg{ width:100%; height:100%; object-fit:cover; }
-
-/* 🔑 FIX: Transparent Shade (Gradient) */
-#overlay{
-  position:absolute;
-  bottom:0;
-  left:0;
-  right:0;
-  background: linear-gradient(transparent, rgba(0,0,0,0.85) 40%);
-  padding:80px 40px 40px 40px;
-}
-#headlineOut{
-  font-size:60px;
-  line-height:1.2;
-  margin:0;
-  color:#ffffff; /* White Headline as per screenshot */
-  font-weight:bold;
-}
-#descOut{
-  margin-top:15px;
-  font-size:32px;
-  color:#ffcc00; /* Yellow Description as per screenshot */
-}
-
-/* 🔑 FIX: Watermark Function added */
-#watermark{
-  position:absolute;
-  right:30px;
-  bottom:30px;
-  color:#ffcc00; /* Yellow Watermark as per screenshot */
-  font-weight:bold;
-  font-size:26px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-</style>
+        .preview-area { width: 100%; max-width: 450px; text-align: center; }
+        #preview-img { width: 100%; border-radius: 15px; border: 4px solid var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.6); display: none; margin-top: 10px; }
+        .placeholder { width: 100%; aspect-ratio: 1/1; background: #1e293b; border-radius: 15px; display: flex; align-items: center; justify-content: center; border: 2px dashed #444; color: #64748b; margin-top: 10px; }
+        #hint { display:none; color:var(--accent); margin-top:15px; font-weight:bold; background: rgba(255,204,0,0.1); padding: 10px; border-radius: 8px; }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
-  <h2>Post Maker</h2>
-
-  <label>फोटो निवडा</label>
-  <input type="file" id="imageInput" accept="image/*">
-
-  <label>हेडलाईन (पांढरा रंग)</label>
-  <input type="text" id="headline" placeholder="मुख्य बातमी येथे लिहा">
-
-  <label>विवरण (पिवळा रंग)</label>
-  <textarea id="desc" rows="3" placeholder="थोडक्यात माहिती येथे लिहा"></textarea>
-
-  <button id="generateBtn">पोस्ट तयार करा</button>
-
-  <div id="preview">
-    <img id="finalImage">
-    <a id="downloadBtn">इमेज सेव्ह करा</a>
-  </div>
+<div class="header">
+    <h1>🚀 Baatmi Point Creator Pro</h1>
 </div>
 
-<div id="postCanvas">
-  <div id="canvasWrap">
-    <img id="userImg" src="">
-    <div id="overlay">
-      <h1 id="headlineOut"></h1>
-      <div id="descOut"></div>
+<div class="main">
+    <div class="editor">
+        <div class="input-group">
+            <label>1. बैकग्राउंड फोटो चुनें</label>
+            <input type="file" id="uFile" accept="image/*" onchange="previewSelected(event)">
+        </div>
+        <div class="input-group">
+            <label>2. हाईलाइट शीर्षक (पीला टेक्स्ट)</label>
+            <input type="text" id="uTitle" placeholder="उदा: अजीत पवार ने लिया बड़ा फैसला">
+        </div>
+        <div class="input-group">
+            <label>3. पूरी खबर (सफेद टेक्स्ट)</label>
+            <textarea id="uDesc" rows="3" placeholder="बाकी की खबर यहाँ लिखें..."></textarea>
+        </div>
+        <div class="input-group">
+            <label>4. आपका पेज नाम/लोगो</label>
+            <input type="text" id="uFoot" placeholder="उदा: @baatmi_point">
+        </div>
+        <button class="btn" id="genBtn" onclick="generate()">प्रोफेशनल पोस्ट बनाएँ ✨</button>
     </div>
-    <div id="watermark">@baatmipoint</div>
-  </div>
+
+    <div class="preview-area">
+        <label>लाइव प्रीव्यू (यहाँ से सेव करें)</label>
+        <div id="p-box">
+            <div class="placeholder">फोटो तैयार होकर यहाँ दिखेगी</div>
+            <img id="preview-img">
+        </div>
+        <div id="hint">📥 गैलरी में सेव करने के लिए फोटो पर 'लॉन्ग प्रेस' करें!</div>
+    </div>
+</div>
+
+<div id="render-container">
+    <div id="render-target">
+        <img id="render-img" class="post-bg" crossOrigin="anonymous">
+        <div class="post-overlay"></div>
+        <div class="post-content">
+            <div id="rt-title" class="post-title"></div>
+            <div id="rt-desc" class="post-desc"></div>
+        </div>
+        <div id="rt-foot" class="post-footer"></div>
+    </div>
 </div>
 
 <script>
-const imgInput = document.getElementById('imageInput');
-const userImg = document.getElementById('userImg');
-const headlineOut = document.getElementById('headlineOut');
-const descOut = document.getElementById('descOut');
-const finalImage = document.getElementById('finalImage');
-const downloadBtn = document.getElementById('downloadBtn');
-const generateBtn = document.getElementById('generateBtn');
+    function previewSelected(event) {
+        const file = event.target.files[0];
+        if(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('render-img').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
 
-imgInput.addEventListener('change', e => {
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    userImg.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
-});
+    async function generate() {
+        const title = document.getElementById('uTitle').value;
+        const desc = document.getElementById('uDesc').value;
+        const foot = document.getElementById('uFoot').value;
+        const img = document.getElementById('render-img');
+        const btn = document.getElementById('genBtn');
 
-generateBtn.addEventListener('click', () => {
-  if(!userImg.src || userImg.src === window.location.href){
-    alert("कृपया आधी फोटो निवडा!");
-    return;
-  }
+        if(!img.src || title.trim() === "") return alert("कृपया फोटो और शीर्षक भरें!");
 
-  headlineOut.innerText = document.getElementById('headline').value || "";
-  descOut.innerText = document.getElementById('desc').value || "";
+        document.getElementById('rt-title').innerText = title;
+        document.getElementById('rt-desc').innerText = desc;
+        document.getElementById('rt-foot').innerText = foot;
 
-  generateBtn.disabled = true;
-  generateBtn.innerText = "तयार होत आहे...";
+        btn.innerText = "तैयार हो रहा है... ⏳";
+        btn.disabled = true;
 
-  // DOM को अपडेट होने का समय दें
-  setTimeout(() => {
-    html2canvas(document.getElementById('postCanvas'), {
-      scale: 1, 
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: "#000"
-    }).then(canvas => {
-      const imgData = canvas.toDataURL("image/png");
-      finalImage.src = imgData;
-      finalImage.style.display = "block";
-      
-      downloadBtn.href = imgData;
-      downloadBtn.download = "BaatmiPoint_Post.png";
-      downloadBtn.style.display = "block";
-
-      generateBtn.disabled = false;
-      generateBtn.innerText = "पोस्ट तयार करा";
-      
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }).catch(err => {
-      alert("Error! फिर से कोशिश करें।");
-      generateBtn.disabled = false;
-    });
-  }, 500);
-});
+        setTimeout(() => {
+            html2canvas(document.querySelector("#render-target"), {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: "#000",
+                width: 1000,
+                height: 1000
+            }).then(canvas => {
+                const previewImg = document.getElementById('preview-img');
+                const placeholder = document.querySelector('.placeholder');
+                
+                previewImg.src = canvas.toDataURL("image/png");
+                previewImg.style.display = "block";
+                placeholder.style.display = "none";
+                document.getElementById('hint').style.display = "block";
+                
+                btn.innerText = "प्रोफेशनल पोस्ट बनाएँ ✨";
+                btn.disabled = false;
+                previewImg.scrollIntoView({ behavior: 'smooth' });
+            });
+        }, 500);
+    }
 </script>
-
 </body>
 </html>
