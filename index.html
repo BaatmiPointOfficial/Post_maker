@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Baatmi Point – Post Maker</title>
 
-<!-- html2canvas -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
@@ -43,7 +42,8 @@ input, textarea{
   background:#262626;
   color:#fff;
 }
-button{
+/* Yellow Trigger Button */
+button#generateBtn{
   width:100%;
   margin-top:14px;
   padding:14px;
@@ -55,7 +55,7 @@ button{
   font-size:16px;
   cursor:pointer;
 }
-button:active{transform:scale(0.98)}
+button#generateBtn:active{transform:scale(0.98)}
 
 #preview{
   margin-top:14px;
@@ -65,6 +65,7 @@ button:active{transform:scale(0.98)}
   max-width:100%;
   border-radius:10px;
   display:none;
+  border: 2px solid #333;
 }
 #downloadBtn{
   display:none;
@@ -75,12 +76,15 @@ button:active{transform:scale(0.98)}
   padding:12px;
   border-radius:8px;
   font-weight:bold;
+  display: block;
+  text-align: center;
 }
 
-/* 🔑 OFF-SCREEN CANVAS (NO display:none) */
+/* 🔑 FIX: OFF-SCREEN CANVAS (Renderable but invisible) */
+/* display: none; को हटाकर स्क्रीन से बाहर किया गया है */
 #postCanvas{
   position:absolute;
-  left:-9999px;
+  left:-9999px; 
   top:0;
   width:720px;
   height:720px;
@@ -96,30 +100,32 @@ button:active{transform:scale(0.98)}
   height:100%;
   object-fit:cover;
 }
+/* Transparent Shade */
 #overlay{
   position:absolute;
   bottom:0;
   left:0;
   right:0;
-  background:rgba(0,0,0,0.7);
+  background:rgba(0,0,0,0.7); /* पुरानी इमेज जैसा शेड */
   padding:28px;
 }
 #headlineOut{
   font-size:34px;
   line-height:1.2;
   margin:0;
-  color:#fff;
+  color:#fff; /* White Headline */
 }
 #descOut{
   margin-top:8px;
   font-size:18px;
-  color:#ffcc00;
+  color:#ffcc00; /* Yellow Description */
 }
+/* Watermark Styling */
 #watermark{
   position:absolute;
   right:16px;
   bottom:12px;
-  color:#ffcc00;
+  color:#ffcc00; /* Yellow Watermark */
   font-weight:bold;
   font-size:14px;
 }
@@ -148,7 +154,6 @@ button:active{transform:scale(0.98)}
   </div>
 </div>
 
-<!-- OFF-SCREEN RENDER AREA -->
 <div id="postCanvas">
   <div id="canvasWrap">
     <img id="userImg">
@@ -183,7 +188,7 @@ imgInput.addEventListener('change', e=>{
 });
 
 generateBtn.addEventListener('click', ()=>{
-  if(!userImg.src){
+  if(!userImg.src || userImg.src === ""){
     alert("कृपया फोटो चुनें");
     return;
   }
@@ -191,19 +196,31 @@ generateBtn.addEventListener('click', ()=>{
   descOut.innerText = document.getElementById('desc').value || "";
 
   generateBtn.disabled = true;
-  setTimeout(()=>generateBtn.disabled=false, 1500);
+  generateBtn.innerText = "कृपया प्रतीक्षा करें...";
 
-  html2canvas(document.getElementById('postCanvas'), {
-    scale:2,
-    useCORS:true
-  }).then(canvas=>{
-    const url = canvas.toDataURL("image/png");
-    finalImage.src = url;
-    finalImage.style.display = "block";
-    downloadBtn.href = url;
-    downloadBtn.download = "baatmipoint_post.png";
-    downloadBtn.style.display = "inline-block";
-  });
+  // html2canvas को रेंडर करने के लिए थोड़ा समय दें
+  setTimeout(() => {
+      html2canvas(document.getElementById('postCanvas'), {
+        scale: 2, // बेहतर गुणवत्ता के लिए स्केल
+        useCORS: true, // क्रॉस-ओरिजिन इमेज के लिए महत्वपूर्ण
+        backgroundColor: null // पारदर्शी पृष्ठभूमि की अनुमति दें यदि आवश्यक हो
+      }).then(canvas => {
+        const url = canvas.toDataURL("image/png");
+        finalImage.src = url;
+        finalImage.style.display = "block";
+        downloadBtn.href = url;
+        downloadBtn.download = "baatmipoint_post.png";
+        downloadBtn.style.display = "block";
+        
+        generateBtn.disabled = false;
+        generateBtn.innerText = "पोस्ट बनाएं";
+      }).catch(err => {
+          console.error("Image generation failed:", err);
+          alert("इमेज बनाने में विफल। कृपया पुनः प्रयास करें।");
+          generateBtn.disabled = false;
+          generateBtn.innerText = "पोस्ट बनाएं";
+      });
+  }, 100); // 100ms का छोटा विलंब
 });
 </script>
 
