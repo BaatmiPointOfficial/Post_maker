@@ -2,65 +2,57 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Baatmi Point – Post Maker</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-*{box-sizing:border-box}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
 body{
   margin:0;
-  padding:16px;
-  font-family:Arial, sans-serif;
-  background:#0f0f0f;
-  color:#fff;
+  padding:15px;
+  font-family: 'Arial', sans-serif;
+  background:#121212;
+  color:#eee;
 }
 .container{
-  max-width:420px;
+  max-width:450px;
   margin:auto;
-  background:#1a1a1a;
-  padding:16px;
-  border-radius:14px;
+  background:#1e1e1e;
+  padding:20px;
+  border-radius:15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
-h2{
-  text-align:center;
-  color:#ffcc00;
-  margin-top:0;
-}
-label{
-  display:block;
-  margin-top:10px;
-  font-size:13px;
-}
+h2{ text-align:center; color:#ffcc00; margin-bottom:20px; }
+label{ display:block; margin-top:12px; font-size:14px; font-weight:bold; color:#bbb; }
 input, textarea{
   width:100%;
   padding:12px;
   margin-top:6px;
   border-radius:8px;
   border:1px solid #333;
-  background:#262626;
+  background:#2a2a2a;
   color:#fff;
+  font-size:16px;
 }
-/* Yellow Trigger Button */
-button#generateBtn{
+
+/* Yellow Button Trigger */
+#generateBtn{
   width:100%;
-  margin-top:14px;
-  padding:14px;
+  margin-top:20px;
+  padding:15px;
   border:none;
   border-radius:10px;
   background:#ffcc00;
   color:#000;
   font-weight:bold;
-  font-size:16px;
+  font-size:18px;
   cursor:pointer;
 }
-button#generateBtn:active{transform:scale(0.98)}
+#generateBtn:active{ transform:scale(0.96); }
 
-#preview{
-  margin-top:14px;
-  text-align:center;
-}
+#preview{ margin-top:20px; text-align:center; }
 #finalImage{
   max-width:100%;
   border-radius:10px;
@@ -69,65 +61,66 @@ button#generateBtn:active{transform:scale(0.98)}
 }
 #downloadBtn{
   display:none;
-  margin-top:10px;
-  background:#27ae60;
+  margin-top:15px;
+  background:#2ecc71;
   color:#fff;
   text-decoration:none;
-  padding:12px;
-  border-radius:8px;
+  padding:15px;
+  border-radius:10px;
   font-weight:bold;
+  text-align:center;
   display: block;
-  text-align: center;
 }
 
-/* 🔑 FIX: OFF-SCREEN CANVAS (Renderable but invisible) */
-/* display: none; को हटाकर स्क्रीन से बाहर किया गया है */
+/* 🔑 FIX: OFF-SCREEN RENDERING AREA */
+/* display: none को हटाकर position: absolute किया गया है */
 #postCanvas{
   position:absolute;
-  left:-9999px; 
+  left:-5000px; 
   top:0;
-  width:720px;
-  height:720px;
+  width:1080px; 
+  height:1080px;
   background:#000;
+  overflow:hidden;
 }
 #canvasWrap{
   position:relative;
-  width:720px;
-  height:720px;
+  width:1080px;
+  height:1080px;
 }
-#userImg{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-/* Transparent Shade */
+#userImg{ width:100%; height:100%; object-fit:cover; }
+
+/* 🔑 FIX: Transparent Shade (Gradient) */
 #overlay{
   position:absolute;
   bottom:0;
   left:0;
   right:0;
-  background:rgba(0,0,0,0.7); /* पुरानी इमेज जैसा शेड */
-  padding:28px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.85) 40%);
+  padding:80px 40px 40px 40px;
 }
 #headlineOut{
-  font-size:34px;
+  font-size:60px;
   line-height:1.2;
   margin:0;
-  color:#fff; /* White Headline */
+  color:#ffffff; /* White Headline as per screenshot */
+  font-weight:bold;
 }
 #descOut{
-  margin-top:8px;
-  font-size:18px;
-  color:#ffcc00; /* Yellow Description */
+  margin-top:15px;
+  font-size:32px;
+  color:#ffcc00; /* Yellow Description as per screenshot */
 }
-/* Watermark Styling */
+
+/* 🔑 FIX: Watermark Function added */
 #watermark{
   position:absolute;
-  right:16px;
-  bottom:12px;
-  color:#ffcc00; /* Yellow Watermark */
+  right:30px;
+  bottom:30px;
+  color:#ffcc00; /* Yellow Watermark as per screenshot */
   font-weight:bold;
-  font-size:14px;
+  font-size:26px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 </style>
 </head>
@@ -137,26 +130,26 @@ button#generateBtn:active{transform:scale(0.98)}
 <div class="container">
   <h2>Post Maker</h2>
 
-  <label>फोटो चुनें</label>
+  <label>फोटो निवडा</label>
   <input type="file" id="imageInput" accept="image/*">
 
-  <label>हेडलाइन (White)</label>
-  <input type="text" id="headline" placeholder="मुख्य बात यहाँ लिखें">
+  <label>हेडलाईन (पांढरा रंग)</label>
+  <input type="text" id="headline" placeholder="मुख्य बातमी येथे लिहा">
 
-  <label>विवरण (Yellow)</label>
-  <textarea id="desc" rows="3" placeholder="डिटेल यहाँ लिखें"></textarea>
+  <label>विवरण (पिवळा रंग)</label>
+  <textarea id="desc" rows="3" placeholder="थोडक्यात माहिती येथे लिहा"></textarea>
 
-  <button id="generateBtn">पोस्ट बनाएं</button>
+  <button id="generateBtn">पोस्ट तयार करा</button>
 
   <div id="preview">
     <img id="finalImage">
-    <a id="downloadBtn">इमेज सेव करें</a>
+    <a id="downloadBtn">इमेज सेव्ह करा</a>
   </div>
 </div>
 
 <div id="postCanvas">
   <div id="canvasWrap">
-    <img id="userImg">
+    <img id="userImg" src="">
     <div id="overlay">
       <h1 id="headlineOut"></h1>
       <div id="descOut"></div>
@@ -166,11 +159,6 @@ button#generateBtn:active{transform:scale(0.98)}
 </div>
 
 <script>
-/* CDN guard */
-if (typeof html2canvas === "undefined") {
-  alert("Rendering library load failed. Please refresh once.");
-}
-
 const imgInput = document.getElementById('imageInput');
 const userImg = document.getElementById('userImg');
 const headlineOut = document.getElementById('headlineOut');
@@ -179,48 +167,53 @@ const finalImage = document.getElementById('finalImage');
 const downloadBtn = document.getElementById('downloadBtn');
 const generateBtn = document.getElementById('generateBtn');
 
-imgInput.addEventListener('change', e=>{
+imgInput.addEventListener('change', e => {
   const file = e.target.files[0];
   if(!file) return;
   const reader = new FileReader();
-  reader.onload = ev => userImg.src = ev.target.result;
+  reader.onload = ev => {
+    userImg.src = ev.target.result;
+  };
   reader.readAsDataURL(file);
 });
 
-generateBtn.addEventListener('click', ()=>{
-  if(!userImg.src || userImg.src === ""){
-    alert("कृपया फोटो चुनें");
+generateBtn.addEventListener('click', () => {
+  if(!userImg.src || userImg.src === window.location.href){
+    alert("कृपया आधी फोटो निवडा!");
     return;
   }
+
   headlineOut.innerText = document.getElementById('headline').value || "";
   descOut.innerText = document.getElementById('desc').value || "";
 
   generateBtn.disabled = true;
-  generateBtn.innerText = "कृपया प्रतीक्षा करें...";
+  generateBtn.innerText = "तयार होत आहे...";
 
-  // html2canvas को रेंडर करने के लिए थोड़ा समय दें
+  // DOM को अपडेट होने का समय दें
   setTimeout(() => {
-      html2canvas(document.getElementById('postCanvas'), {
-        scale: 2, // बेहतर गुणवत्ता के लिए स्केल
-        useCORS: true, // क्रॉस-ओरिजिन इमेज के लिए महत्वपूर्ण
-        backgroundColor: null // पारदर्शी पृष्ठभूमि की अनुमति दें यदि आवश्यक हो
-      }).then(canvas => {
-        const url = canvas.toDataURL("image/png");
-        finalImage.src = url;
-        finalImage.style.display = "block";
-        downloadBtn.href = url;
-        downloadBtn.download = "baatmipoint_post.png";
-        downloadBtn.style.display = "block";
-        
-        generateBtn.disabled = false;
-        generateBtn.innerText = "पोस्ट बनाएं";
-      }).catch(err => {
-          console.error("Image generation failed:", err);
-          alert("इमेज बनाने में विफल। कृपया पुनः प्रयास करें।");
-          generateBtn.disabled = false;
-          generateBtn.innerText = "पोस्ट बनाएं";
-      });
-  }, 100); // 100ms का छोटा विलंब
+    html2canvas(document.getElementById('postCanvas'), {
+      scale: 1, 
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: "#000"
+    }).then(canvas => {
+      const imgData = canvas.toDataURL("image/png");
+      finalImage.src = imgData;
+      finalImage.style.display = "block";
+      
+      downloadBtn.href = imgData;
+      downloadBtn.download = "BaatmiPoint_Post.png";
+      downloadBtn.style.display = "block";
+
+      generateBtn.disabled = false;
+      generateBtn.innerText = "पोस्ट तयार करा";
+      
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }).catch(err => {
+      alert("Error! फिर से कोशिश करें।");
+      generateBtn.disabled = false;
+    });
+  }, 500);
 });
 </script>
 
