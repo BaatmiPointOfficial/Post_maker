@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baatmi Point - V6 Pro</title>
+    <title>Baatmi Point - V7 Optimized</title>
     <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -23,20 +23,20 @@
         #preview-img { width: 100%; border-radius: 10px; border: 3px solid var(--accent); display: none; margin-bottom: 15px; }
         .download-btn { display: none; background: #10b981; color: white; text-decoration: none; padding: 15px; border-radius: 10px; font-weight: bold; text-align: center; font-size: 18px; }
 
-        /* Rendering Engine */
+        /* Rendering Engine - Optimized Placement */
         #render-container { position: absolute; left: -9999px; top: 0; }
         #render-target { width: 1080px; height: 1080px; background: #000; position: relative; overflow: hidden; border: 15px solid white; }
         .post-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; }
-        .post-overlay { position: absolute; bottom: 0; width: 100%; height: 70%; background: linear-gradient(transparent, rgba(0,0,0,0.85), rgba(0,0,0,0.98)); }
-        .post-content { position: absolute; bottom: 140px; width: 100%; padding: 0 60px; text-align: center; box-sizing: border-box; }
-        .post-desc { color: #fff; font-family: 'Khand', sans-serif; font-size: 65px; font-weight: 500; line-height: 1.4; }
+        .post-overlay { position: absolute; bottom: 0; width: 100%; height: 60%; background: linear-gradient(transparent, rgba(0,0,0,0.8), rgba(0,0,0,0.95)); }
+        .post-content { position: absolute; bottom: 90px; width: 100%; padding: 0 65px; text-align: center; box-sizing: border-box; }
+        .post-desc { color: #fff; font-family: 'Khand', sans-serif; font-size: 52px; font-weight: 500; line-height: 1.35; }
         .highlight { color: var(--accent); font-weight: 700; }
-        .post-footer { position: absolute; bottom: 45px; width: 100%; text-align: center; color: white; font-size: 40px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .post-footer { position: absolute; bottom: 40px; width: 100%; text-align: center; color: white; font-size: 38px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 15px; }
     </style>
 </head>
 <body>
 
-<div class="header"><h1>🚩 Baatmi Point Creator V6</h1></div>
+<div class="header"><h1>🚩 Baatmi Point Optimized V7</h1></div>
 
 <div class="main">
     <div class="editor">
@@ -68,7 +68,7 @@
             <div id="rt-desc" class="post-desc"></div>
         </div>
         <div id="rt-foot" class="post-footer">
-            <span style="font-size: 45px;">💡</span> baatmipoint.in
+            <span style="font-size: 42px;">💡</span> baatmipoint.in
         </div>
     </div>
 </div>
@@ -114,7 +114,7 @@
                     previewImg.src = dataUrl;
                     previewImg.style.display = "block";
                     saveBtn.href = dataUrl;
-                    saveBtn.download = "BaatmiPoint_V6_" + Date.now() + ".png";
+                    saveBtn.download = "BaatmiPoint_V7_" + Date.now() + ".png";
                     saveBtn.style.display = "block";
                     btn.innerText = "प्रोफेशनल पोस्ट तयार करा ✨";
                     btn.disabled = false;
@@ -130,4 +130,3 @@
 </script>
 </body>
 </html>
-
