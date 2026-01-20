@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baatmi Point - Advanced Creator</title>
+    <title>Baatmi Point - V6 Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -14,44 +14,48 @@
         .main { padding: 20px; max-width: 500px; width: 100%; box-sizing: border-box; }
         .editor { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid #334155; }
         .help-text { font-size: 12px; color: var(--accent); margin-bottom: 10px; display: block; }
-        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; font-size: 16px; box-sizing: border-box; }
-        .btn-gen { background: var(--accent); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 18px; width: 100%; cursor: pointer; }
+        input[type="file"], textarea { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; font-size: 16px; box-sizing: border-box; }
+        .option-group { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; background: #0f172a; padding: 10px; border-radius: 8px; border: 1px solid #334155; }
+        .option-group input { width: auto; margin: 0; }
+        .btn-gen { background: var(--accent); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 18px; width: 100%; cursor: pointer; transition: 0.2s; }
         
         #preview-area { margin-top: 25px; text-align: center; width: 100%; }
-        #preview-img { width: 100%; border-radius: 10px; border: 3px solid var(--accent); display: none; }
-        .download-btn { display: none; background: #10b981; color: white; text-decoration: none; padding: 15px; border-radius: 10px; font-weight: bold; margin-top: 15px; text-align: center; display: block; font-size: 18px; }
+        #preview-img { width: 100%; border-radius: 10px; border: 3px solid var(--accent); display: none; margin-bottom: 15px; }
+        .download-btn { display: none; background: #10b981; color: white; text-decoration: none; padding: 15px; border-radius: 10px; font-weight: bold; text-align: center; font-size: 18px; }
 
         /* Rendering Engine */
         #render-container { position: absolute; left: -9999px; top: 0; }
         #render-target { width: 1080px; height: 1080px; background: #000; position: relative; overflow: hidden; border: 15px solid white; }
         .post-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; }
-        .post-overlay { position: absolute; bottom: 0; width: 100%; height: 75%; background: linear-gradient(transparent, rgba(0,0,0,0.8), rgba(0,0,0,0.98)); }
-        .post-content { position: absolute; bottom: 130px; width: 100%; padding: 0 60px; text-align: center; box-sizing: border-box; }
-        .post-title { color: var(--accent); font-family: 'Khand', sans-serif; font-size: 85px; font-weight: 700; line-height: 1.1; margin-bottom: 25px; }
-        .post-desc { color: #fff; font-family: 'Khand', sans-serif; font-size: 58px; font-weight: 500; line-height: 1.3; }
+        .post-overlay { position: absolute; bottom: 0; width: 100%; height: 70%; background: linear-gradient(transparent, rgba(0,0,0,0.85), rgba(0,0,0,0.98)); }
+        .post-content { position: absolute; bottom: 140px; width: 100%; padding: 0 60px; text-align: center; box-sizing: border-box; }
+        .post-desc { color: #fff; font-family: 'Khand', sans-serif; font-size: 65px; font-weight: 500; line-height: 1.4; }
         .highlight { color: var(--accent); font-weight: 700; }
-        .post-footer { position: absolute; bottom: 45px; width: 100%; text-align: center; color: white; font-size: 38px; font-weight: bold; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .post-footer { position: absolute; bottom: 45px; width: 100%; text-align: center; color: white; font-size: 40px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 15px; }
     </style>
 </head>
 <body>
 
-<div class="header"><h1>🚩 Baatmi Point Advanced Creator</h1></div>
+<div class="header"><h1>🚩 Baatmi Point Creator V6</h1></div>
 
 <div class="main">
     <div class="editor">
         <label style="font-size: 14px; color: #94a3b8;">१. फोटो निवडा</label>
         <input type="file" id="uFile" accept="image/*" onchange="loadImg(event)">
         
-        <input type="text" id="uTitle" placeholder="ठळक बातमी (उदा: मोठी बातमी!)">
+        <span class="help-text">💡 महत्वाचे शब्द हायलाईट करण्यासाठी * वापरा (उदा. *ब्रेकिंग*)</span>
+        <textarea id="uDesc" rows="5" placeholder="बातमीचा मजकूर इथे लिहा..."></textarea>
         
-        <span class="help-text">💡 महत्वाचे शब्द हायलाईट करण्यासाठी त्याभोवती * वापरा (उदा. *महत्वाचे*)</span>
-        <textarea id="uDesc" rows="4" placeholder="बातमीचा मजकूर इथे लिहा..."></textarea>
+        <div class="option-group">
+            <input type="checkbox" id="wMark" checked>
+            <label for="wMark">वॉटरमार्क जोडा (baatmipoint.in)</label>
+        </div>
         
         <button class="btn-gen" id="genBtn" onclick="generate()">प्रोफेशनल पोस्ट तयार करा ✨</button>
     </div>
 
     <div id="preview-area">
-        <img id="preview-img">
+        <img id="preview-img" alt="Preview">
         <a id="saveBtn" class="download-btn">गॅलरीमध्ये सेव्ह करा 📥</a>
     </div>
 </div>
@@ -61,10 +65,9 @@
         <img id="target-img" class="post-bg">
         <div class="post-overlay"></div>
         <div class="post-content">
-            <div id="rt-title" class="post-title"></div>
             <div id="rt-desc" class="post-desc"></div>
         </div>
-        <div class="post-footer">
+        <div id="rt-foot" class="post-footer">
             <span style="font-size: 45px;">💡</span> baatmipoint.in
         </div>
     </div>
@@ -72,51 +75,55 @@
 
 <script>
     const targetImg = document.getElementById('target-img');
+    const previewImg = document.getElementById('preview-img');
+    const saveBtn = document.getElementById('saveBtn');
+
     function loadImg(e) {
         const reader = new FileReader();
         reader.onload = (event) => { targetImg.src = event.target.result; }
         reader.readAsDataURL(e.target.files[0]);
     }
 
-    // कीवर्ड हायलाईटिंग फंक्शन
     function parseHighlight(text) {
         return text.replace(/\*(.*?)\*/g, '<span class="highlight">$1</span>');
     }
 
     async function generate() {
-        const title = document.getElementById('uTitle').value;
         const desc = document.getElementById('uDesc').value;
         const btn = document.getElementById('genBtn');
+        const showWatermark = document.getElementById('wMark').checked;
         
-        if(!targetImg.src || title.trim() === "") return alert("कृपया फोटो आणि शीर्षक भरा!");
+        if(!targetImg.src || desc.trim() === "") return alert("कृपया फोटो आणि बातमीचा मजकूर भरा!");
 
-        // मजकूर हायलाईटसह भरणे
-        document.getElementById('rt-title').innerHTML = parseHighlight(title);
         document.getElementById('rt-desc').innerHTML = parseHighlight(desc);
+        document.getElementById('rt-foot').style.display = showWatermark ? 'flex' : 'none';
 
-        btn.innerText = "प्रोसेस होत आहे... ⏳";
+        btn.innerText = "तयार होत आहे... ⏳";
         btn.disabled = true;
+        saveBtn.style.display = "none";
+        previewImg.style.display = "none";
 
         setTimeout(() => {
             html2canvas(document.getElementById('render-target'), {
-                scale: 2, // HD Quality
+                scale: 2,
                 useCORS: true,
                 backgroundColor: "#000"
             }).then(canvas => {
-                const previewImg = document.getElementById('preview-img');
-                const saveBtn = document.getElementById('saveBtn');
-                const dataUrl = canvas.toDataURL("image/png", 1.0);
-
-                previewImg.src = dataUrl;
-                previewImg.style.display = "block";
-                
-                saveBtn.href = dataUrl;
-                saveBtn.download = "BaatmiPoint_V3_" + Date.now() + ".png";
-                saveBtn.style.display = "block";
-
-                btn.innerText = "प्रोफेशनल पोस्ट तयार करा ✨";
+                canvas.toBlob(function(blob) {
+                    const dataUrl = URL.createObjectURL(blob);
+                    previewImg.src = dataUrl;
+                    previewImg.style.display = "block";
+                    saveBtn.href = dataUrl;
+                    saveBtn.download = "BaatmiPoint_V6_" + Date.now() + ".png";
+                    saveBtn.style.display = "block";
+                    btn.innerText = "प्रोफेशनल पोस्ट तयार करा ✨";
+                    btn.disabled = false;
+                    previewImg.scrollIntoView({ behavior: 'smooth' });
+                }, 'image/png', 1.0);
+            }).catch(err => {
+                alert("काहीतरी चूक झाली.");
                 btn.disabled = false;
-                previewImg.scrollIntoView({ behavior: 'smooth' });
+                btn.innerText = "प्रोफेशनल पोस्ट तयार करा ✨";
             });
         }, 500);
     }
