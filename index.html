@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Post Creator Pro</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Poppins:wght@400;600&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
@@ -35,30 +35,29 @@ body{
 }
 
 h1{
-  text-align:center;
-  font-family:'Khand';
+  font-family:'Khand',sans-serif;
   color:var(--yellow);
-  margin-bottom:20px;
+  text-align:center;
+  margin-bottom:18px;
 }
-
-/* -------- FORM -------- */
 
 label{
   font-size:11px;
-  color:#aaa;
+  color:#777;
   text-transform:uppercase;
-  margin-bottom:6px;
   display:block;
+  margin-bottom:6px;
 }
 
-input, textarea{
+input,textarea{
   width:100%;
-  padding:14px;
-  margin-bottom:14px;
   background:var(--input);
   border:1px solid #333;
   border-radius:12px;
+  padding:14px;
   color:#fff;
+  margin-bottom:14px;
+  font-size:14px;
 }
 
 button{
@@ -66,14 +65,12 @@ button{
   padding:16px;
   border:none;
   border-radius:14px;
+  background:var(--yellow);
+  color:#000;
   font-family:'Khand';
   font-size:22px;
-  background:linear-gradient(135deg,var(--yellow),#f39c12);
-  color:#000;
   cursor:pointer;
 }
-
-/* -------- CANVAS -------- */
 
 #canvas{
   margin-top:24px;
@@ -89,68 +86,45 @@ button{
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:center top;
   display:none;
 }
-
-/* -------- OVERLAY -------- */
 
 .overlay{
   position:absolute;
   bottom:0;
   left:0;
-  width:100%;
-  height:55%;
-  padding:20px;
-  background:rgba(0,0,0,0.75);
-  display:none;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-start;
+  right:0;
+  padding:18px;
+  background:rgba(0,0,0,0.7);
 }
 
-/* -------- TEXT -------- */
-
 .headline{
-  font-family:'Khand','Noto Sans Devanagari',sans-serif;
-  font-size:32px;
-  line-height:1.15;
-  margin-bottom:10px;
+  font-family:'Khand';
+  font-size:30px;
   color:#fff;
-  text-shadow:0 2px 6px rgba(0,0,0,0.6);
+  line-height:1.15;
 }
 
 .desc{
-  font-size:15px;
-  line-height:1.4;
-  color:#eaeaea;
-  text-shadow:0 1px 4px rgba(0,0,0,0.5);
+  font-size:16px;
+  color:#ffcc00;
+  margin-top:6px;
 }
 
-/* Yellow highlight */
-.hl{
-  color:var(--yellow);
-}
-
-/* -------- WATERMARK -------- */
-
-.handle{
+.watermark{
   position:absolute;
+  right:12px;
   bottom:10px;
-  right:14px;
   font-size:12px;
+  color:#ffcc00;
   font-weight:600;
-  color:var(--yellow);
-  text-shadow:0 1px 3px rgba(0,0,0,0.6);
 }
-
-/* -------- SAVE -------- */
 
 #saveBtn{
+  display:none;
   margin-top:14px;
   background:#27ae60;
   color:#fff;
-  display:none;
 }
 </style>
 </head>
@@ -161,26 +135,26 @@ button{
 <h1>Post Creator Pro</h1>
 
 <label>Photo</label>
-<input type="file" id="imageInput" accept="image/*">
+<input type="file" id="imgInput" accept="image/*">
 
-<label>Headline (*highlight* के लिए)</label>
-<input id="headlineInput" placeholder="संजय राऊत ने *भाजपा* को घेरा">
+<label>Headline</label>
+<input type="text" id="headlineInput">
 
 <label>Description</label>
 <textarea id="descInput" rows="3"></textarea>
 
 <label>Handle</label>
-<input id="handleInput" value="@baatmipoint">
+<input type="text" id="handleInput" value="@baatmipoint">
 
 <button onclick="createPost()">Create Post</button>
 
 <div id="canvas">
   <img id="photo">
-  <div id="overlay" class="overlay">
+  <div class="overlay">
     <div id="outHeadline" class="headline"></div>
     <div id="outDesc" class="desc"></div>
-    <div id="outHandle" class="handle"></div>
   </div>
+  <div id="outHandle" class="watermark"></div>
 </div>
 
 <button id="saveBtn" onclick="saveImage()">Save Image</button>
@@ -188,70 +162,37 @@ button{
 </div>
 
 <script>
-function formatText(text){
-  return text.replace(/\*(.*?)\*/g,'<span class="hl">$1</span>');
-}
-
 function createPost(){
-  const fileInput = document.getElementById("imageInput");
-  const file = fileInput.files[0];
+  const imgFile=document.getElementById('imgInput').files[0];
+  if(!imgFile) return alert('Photo required');
 
-  if(!file){
-    alert("कृपया फोटो चुनें");
-    return;
-  }
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=document.getElementById('photo');
+    img.src=e.target.result;
+    img.style.display='block';
 
-  const img = document.getElementById("photo");
-  const reader = new FileReader();
+    document.getElementById('outHeadline').innerText=
+      document.getElementById('headlineInput').value;
 
-  /* 🔑 MOBILE SAFE LOGIC */
-  img.onload = function(){
-    img.style.display = "block";
+    document.getElementById('outDesc').innerText=
+      document.getElementById('descInput').value;
 
-    document.getElementById("overlay").style.display = "flex";
+    document.getElementById('outHandle').innerText=
+      document.getElementById('handleInput').value;
 
-    document.getElementById("outHeadline").innerHTML =
-      formatText(document.getElementById("headlineInput").value);
-
-    document.getElementById("outDesc").innerHTML =
-      formatText(document.getElementById("descInput").value);
-
-    document.getElementById("outHandle").innerText =
-      document.getElementById("handleInput").value.trim() || "@baatmipoint";
-
-    document.getElementById("saveBtn").style.display = "block";
+    document.getElementById('saveBtn').style.display='block';
   };
-
-  reader.onload = function(e){
-    /* src LAST में set */
-    img.src = e.target.result;
-  };
-
-  reader.readAsDataURL(file);
+  reader.readAsDataURL(imgFile);
 }
 
 function saveImage(){
-  const btn = document.getElementById("saveBtn");
-  btn.disabled = true;
-  btn.innerText = "Saving...";
-
-  html2canvas(document.getElementById("canvas"),{
-    scale:3,
-    backgroundColor:null
-  }).then(canvas=>{
-    canvas.toBlob(blob=>{
-      const url = URL.createObjectURL(blob);
-      const a=document.createElement("a");
-      a.href=url;
-      a.download="Post_"+Date.now()+".png";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      btn.disabled=false;
-      btn.innerText="Save Image";
-    });
+  html2canvas(document.getElementById('canvas'),{scale:3})
+  .then(canvas=>{
+    const link=document.createElement('a');
+    link.download='post_'+Date.now()+'.png';
+    link.href=canvas.toDataURL('image/png');
+    link.click();
   });
 }
 </script>
