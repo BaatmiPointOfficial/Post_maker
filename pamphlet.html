@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baatmi Point - Pamphlet Maker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body { font-family: 'Mukta', sans-serif; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        .editor-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 400px; width: 100%; margin-bottom: 20px; box-sizing: border-box; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        
+        #poster-target { 
+            width: 1080px; height: 1350px; background: white; position: relative; overflow: hidden;
+        }
+        .red-curve { 
+            position: absolute; top: 0; left: 0; width: 450px; height: 100%; 
+            background: #d32f2f; clip-path: ellipse(85% 100% at 0% 50%); z-index: 1;
+        }
+        .logo-area { position: absolute; top: 70px; right: 70px; font-size: 90px; font-weight: bold; color: #d32f2f; z-index: 2; }
+        .quote-mark { position: absolute; top: 220px; left: 70px; font-size: 180px; color: #d32f2f; z-index: 2; line-height: 1; }
+        
+        .main-text { 
+            position: absolute; top: 420px; left: 120px; right: 120px; 
+            font-size: 58px; font-weight: 700; line-height: 1.6; color: #222; z-index: 2; text-align: left;
+        }
+        
+        .user-section { position: absolute; bottom: 120px; right: 100px; text-align: center; z-index: 2; }
+        .user-photo { width: 380px; height: 380px; border-radius: 50%; object-fit: cover; border: 12px solid white; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        .user-name { font-size: 50px; font-weight: bold; color: #d32f2f; margin-top: 25px; }
+
+        .btn { background: #d32f2f; color: white; border: none; padding: 18px; border-radius: 10px; cursor: pointer; font-size: 18px; width: 100%; font-weight: bold; margin-top: 10px; }
+        #preview-wrap { transform: scale(0.3); transform-origin: top center; height: 420px; width: 324px; overflow: hidden; border: 2px solid #ddd; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="editor-box">
+        <h3 style="margin-top:0;">टेम्प्लेट १ (NBT स्टाईल)</h3>
+        <textarea id="inText" rows="4" placeholder="येथे मुख्य बातमी किंवा संदेश लिहा...">येथे तुमचा मजकूर येईल...</textarea>
+        <input type="text" id="inName" placeholder="तुमचे नाव लिहा">
+        <label style="display:block; margin-bottom:5px; font-weight:bold;">फोटो निवडा:</label>
+        <input type="file" accept="image/*" onchange="loadFile(event)">
+        <button class="btn" onclick="downloadImg()">डाउनलोड करा 📥</button>
+    </div>
+
+    <div id="preview-wrap">
+        <div id="poster-target">
+            <div class="red-curve"></div>
+            <div class="logo-area">NBT</div>
+            <div class="quote-mark">“</div>
+            <div class="main-text" id="outText">येथे तुमचा मजकूर येईल...</div>
+            
+            <div class="user-section">
+                <img id="outPhoto" class="user-photo" src="https://via.placeholder.com/380">
+                <div class="user-name" id="outName">तुमचे नाव</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadFile(event) {
+            var output = document.getElementById('outPhoto');
+            output.src = URL.createObjectURL(event.target.files[0]);
+        };
+
+        document.getElementById('inText').addEventListener('input', function() { document.getElementById('outText').innerText = this.value; });
+        document.getElementById('inName').addEventListener('input', function() { document.getElementById('outName').innerText = this.value; });
+
+        function downloadImg() {
+            html2canvas(document.getElementById('poster-target'), { scale: 1 }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = 'BaatmiPoint_Template.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
+
