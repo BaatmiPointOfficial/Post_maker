@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baatmi Point Pro - V12.3 Fixed</title>
+    <title>Baatmi Point Pro - V12.5 Final Fix</title>
     <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -23,32 +23,33 @@
         #preview-img { width: 100%; border-radius: 20px; border: 2px solid var(--gold); display: none; margin-bottom: 20px; }
         .save-btn { display: none; background: #10b981; color: white; text-decoration: none; padding: 18px; border-radius: 15px; font-weight: bold; width: 100%; text-align: center; }
         
-        /* रेंडरिंग सुधारणा */
         #render-container { position: absolute; left: -9999px; top: 0; }
         #render-target { width: 1080px; height: 1080px; background: #000; position: relative; overflow: hidden; border: 15px solid white; }
         .post-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; }
-        .post-overlay { position: absolute; bottom: 0; width: 100%; height: 70%; background: linear-gradient(transparent, rgba(0,0,0,1)); z-index: 5; }
-        .post-content { position: absolute; bottom: 130px; width: 100%; padding: 0 75px; text-align: center; box-sizing: border-box; z-index: 10; }
+        .post-overlay { position: absolute; bottom: 0; width: 100%; height: 75%; background: linear-gradient(transparent, rgba(0,0,0,1) 90%); z-index: 5; }
+        .post-content { position: absolute; bottom: 150px; width: 100%; padding: 0 85px; text-align: center; box-sizing: border-box; z-index: 10; display: flex; flex-direction: column; justify-content: flex-end; }
         
-        /* ओळींमधील अंतर वाढवले (Fix for overlapping) */
+        /* फायनल फिक्स: अक्षरे एकमेकांवर चढणार नाहीत */
         .post-desc { 
-            color: #fff; font-family: 'Khand', sans-serif; font-size: 56px; 
-            font-weight: 500; line-height: 1.6; /* 1.6 मुळे अक्षरे एकमेकांवर चढणार नाहीत */
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            color: #fff; font-family: 'Khand', sans-serif; font-size: 48px; 
+            font-weight: 500; line-height: 2.2; /* अत्यंत सुरक्षित अंतर */
+            text-shadow: 4px 4px 15px rgba(0,0,0,1);
+            word-wrap: break-word;
         }
         
-        /* वॉटरमार्क: झेंडा काढला (Fix for Flag) */
+        /* वॉटरमार्क: कोणताही सिंबल नाही */
         .post-footer { 
-            position: absolute; bottom: 50px; width: 100%; text-align: center; 
-            color: var(--gold); font-size: 40px; font-weight: bold; 
+            position: absolute; bottom: 60px; width: 100%; text-align: center; 
+            color: var(--gold); font-size: 44px; font-weight: bold; 
             display: flex; align-items: center; justify-content: center; 
             z-index: 20; font-family: 'Khand', sans-serif; 
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
         }
         .highlight { color: var(--gold); font-weight: 700; }
     </style>
 </head>
 <body>
-<div class="navbar"><h1>🚩 BAATMI POINT V12.3</h1></div>
+<div class="navbar"><h1>🚩 BAATMI POINT V12.5</h1></div>
 <div class="container">
     <div class="glass-card">
         <span class="label">📸 फोटो निवडा</span>
@@ -106,27 +107,32 @@
         if(!targetImg.src || desc.trim() === "") return alert("फोटो आणि मजकूर आवश्यक आहे!");
 
         const footer = document.getElementById('rt-foot');
-        // झेंड्याचं सिंबल काढून टाकलं आहे
+        // कोणताही झेंडा किंवा सिंबल नाही
         footer.innerHTML = `${watermarkText}`; 
         footer.style.visibility = showWatermark ? 'visible' : 'hidden';
 
         document.getElementById('rt-desc').innerHTML = parseHighlight(desc);
 
+        // फॉन्ट्स पूर्णपणे लोड होण्याची वाट पाहणे
+        await document.fonts.ready;
+
         setTimeout(() => {
             html2canvas(document.getElementById('render-target'), {
-                scale: 2, useCORS: true, backgroundColor: "#000"
+                scale: 2, 
+                useCORS: true, 
+                backgroundColor: "#000",
+                logging: false
             }).then(canvas => {
-                const dataUrl = canvas.toDataURL('image/png');
+                const dataUrl = canvas.toDataURL('image/png', 1.0);
                 previewImg.src = dataUrl;
                 previewImg.style.display = "block";
                 saveBtn.href = dataUrl;
-                saveBtn.download = "BaatmiPoint_V12_3_" + Date.now() + ".png";
+                saveBtn.download = "BaatmiPoint_V12_5_" + Date.now() + ".png";
                 saveBtn.style.display = "block";
                 previewImg.scrollIntoView({ behavior: 'smooth' });
             });
-        }, 800);
+        }, 1200); // रेंडरिंगसाठी १.२ सेकंद दिला आहे जेणेकरून ओव्हरलॅपिंग टळेल
     }
 </script>
 </body>
 </html>
-
