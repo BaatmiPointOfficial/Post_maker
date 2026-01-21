@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baatmi Point - Pamphlet Maker</title>
+    <title>Baatmi Point - Pamphlet NBT Style</title>
     <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -11,6 +11,7 @@
         .editor-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 400px; width: 100%; margin-bottom: 20px; box-sizing: border-box; }
         input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
         
+        /* पोस्टरची मूळ साईज (बदल करू नये) */
         #poster-target { 
             width: 1080px; height: 1350px; background: white; position: relative; overflow: hidden;
         }
@@ -21,9 +22,17 @@
         .logo-area { position: absolute; top: 70px; right: 70px; font-size: 90px; font-weight: bold; color: #d32f2f; z-index: 2; }
         .quote-mark { position: absolute; top: 220px; left: 70px; font-size: 180px; color: #d32f2f; z-index: 2; line-height: 1; }
         
-        .main-text { 
+        /* मजकूर एरिया - फिक्स */
+        .main-text-container { 
             position: absolute; top: 420px; left: 120px; right: 120px; 
-            font-size: 58px; font-weight: 700; line-height: 1.6; color: #222; z-index: 2; text-align: left;
+            z-index: 2; text-align: left;
+        }
+        /* प्रत्येक ओळीसाठी स्वतंत्र क्लास */
+        .text-line {
+            font-size: 58px; font-weight: 700; color: #222;
+            margin-bottom: 20px; /* ओळींमधील सुरक्षित अंतर */
+            line-height: 1.4; /* वेलांटीसाठी जागा */
+            display: block;
         }
         
         .user-section { position: absolute; bottom: 120px; right: 100px; text-align: center; z-index: 2; }
@@ -31,14 +40,21 @@
         .user-name { font-size: 50px; font-weight: bold; color: #d32f2f; margin-top: 25px; }
 
         .btn { background: #d32f2f; color: white; border: none; padding: 18px; border-radius: 10px; cursor: pointer; font-size: 18px; width: 100%; font-weight: bold; margin-top: 10px; }
-        #preview-wrap { transform: scale(0.3); transform-origin: top center; height: 420px; width: 324px; overflow: hidden; border: 2px solid #ddd; border-radius: 10px; }
+        
+        /* मोबाईलवर पाहण्यासाठी प्रिव्ह्यू बॉक्स */
+        #preview-wrap { 
+            transform: scale(0.3); transform-origin: top center; 
+            height: 420px; width: 324px; 
+            overflow: hidden; border: 2px solid #ddd; border-radius: 10px;
+            margin-bottom: 50px;
+        }
     </style>
 </head>
 <body>
 
     <div class="editor-box">
         <h3 style="margin-top:0;">टेम्प्लेट १ (NBT स्टाईल)</h3>
-        <textarea id="inText" rows="4" placeholder="येथे मुख्य बातमी किंवा संदेश लिहा...">येथे तुमचा मजकूर येईल...</textarea>
+        <textarea id="inText" rows="5" placeholder="येथे मुख्य बातमी लिहा. नवीन ओळीसाठी एंटर दाबा.">येथे तुमचा मजकूर येईल...</textarea>
         <input type="text" id="inName" placeholder="तुमचे नाव लिहा">
         <label style="display:block; margin-bottom:5px; font-weight:bold;">फोटो निवडा:</label>
         <input type="file" accept="image/*" onchange="loadFile(event)">
@@ -50,7 +66,9 @@
             <div class="red-curve"></div>
             <div class="logo-area">NBT</div>
             <div class="quote-mark">“</div>
-            <div class="main-text" id="outText">येथे तुमचा मजकूर येईल...</div>
+            <div class="main-text-container" id="outTextContainer">
+                <div class="text-line">येथे तुमचा मजकूर येईल...</div>
+            </div>
             
             <div class="user-section">
                 <img id="outPhoto" class="user-photo" src="https://via.placeholder.com/380">
@@ -60,23 +78,45 @@
     </div>
 
     <script>
+        // फोटो लोड करणे
         function loadFile(event) {
             var output = document.getElementById('outPhoto');
             output.src = URL.createObjectURL(event.target.files[0]);
         };
 
-        document.getElementById('inText').addEventListener('input', function() { document.getElementById('outText').innerText = this.value; });
+        // मजकूर लाईव्ह अपडेट करणे (Line Split Fix)
+        document.getElementById('inText').addEventListener('input', function() {
+            let text = this.value;
+            let lines = text.split('\n'); // एंटर दाबल्यावर नवीन ओळ
+            let htmlStr = '';
+            lines.forEach(line => {
+                if(line.trim() !== '') {
+                    htmlStr += `<div class="text-line">${line}</div>`;
+                }
+            });
+            document.getElementById('outTextContainer').innerHTML = htmlStr;
+        });
+
         document.getElementById('inName').addEventListener('input', function() { document.getElementById('outName').innerText = this.value; });
 
-        function downloadImg() {
-            html2canvas(document.getElementById('poster-target'), { scale: 1 }).then(canvas => {
+        // डाउनलोड फंक्शन (High Quality Fix)
+        async function downloadImg() {
+            // फॉन्ट लोड होण्याची वाट पाहणे
+            await document.fonts.ready;
+
+            html2canvas(document.getElementById('poster-target'), { 
+                scale: 2, // उच्च गुणवत्ता
+                width: 1080, // फिक्स साईज
+                height: 1350,
+                useCORS: true,
+                backgroundColor: "#ffffff"
+            }).then(canvas => {
                 let link = document.createElement('a');
-                link.download = 'BaatmiPoint_Template.png';
-                link.href = canvas.toDataURL('image/png');
+                link.download = 'BaatmiPoint_NBT_Style.png';
+                link.href = canvas.toDataURL('image/png', 1.0);
                 link.click();
             });
         }
     </script>
 </body>
 </html>
-
