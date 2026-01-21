@@ -3,26 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baatmi Point - V9 Precision</title>
+    <title>Baatmi Point - V10 Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --accent: #ffcc00; --bg: #0f172a; --card: #1e293b; }
-        body { font-family: 'Mukta', sans-serif; background: var(--bg); color: white; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-        .header { background: var(--card); width: 100%; padding: 15px; text-align: center; border-bottom: 3px solid var(--accent); position: sticky; top: 0; z-index: 100; }
-        .header h1 { margin: 0; font-size: 20px; color: var(--accent); font-family: 'Khand', sans-serif; }
-        .main { padding: 20px; max-width: 500px; width: 100%; box-sizing: border-box; }
-        .editor { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid #334155; }
-        .help-text { font-size: 12px; color: var(--accent); margin-bottom: 10px; display: block; }
-        input[type="file"], textarea { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; font-size: 16px; box-sizing: border-box; }
-        .option-group { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; background: #0f172a; padding: 10px; border-radius: 8px; border: 1px solid #334155; }
-        .btn-gen { background: var(--accent); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 18px; width: 100%; cursor: pointer; transition: 0.2s; }
+        :root { --accent: #ffcc00; --primary: #6366f1; --bg: #0f172a; }
         
-        #preview-area { margin-top: 25px; text-align: center; width: 100%; }
-        #preview-img { width: 100%; border-radius: 10px; border: 3px solid var(--accent); display: none; margin-bottom: 15px; }
-        .download-btn { display: none; background: #10b981; color: white; text-decoration: none; padding: 15px; border-radius: 10px; font-weight: bold; text-align: center; font-size: 18px; }
+        body { 
+            font-family: 'Mukta', sans-serif; 
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            color: white; 
+            margin: 0; 
+            padding: 0; 
+            min-height: 100vh;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
 
-        /* Rendering Engine - V9 Typography Fix */
+        .header { 
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            width: 100%; 
+            padding: 20px; 
+            text-align: center; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .header h1 { 
+            margin: 0; 
+            font-size: 24px; 
+            color: var(--accent); 
+            font-family: 'Khand', sans-serif;
+            text-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+        }
+
+        .main { padding: 25px; max-width: 550px; width: 100%; box-sizing: border-box; }
+
+        .editor { 
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            padding: 25px; 
+            border-radius: 24px; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .help-text { font-size: 13px; color: var(--accent); margin-bottom: 12px; display: block; opacity: 0.9; }
+
+        label { font-size: 14px; color: #94a3b8; display: block; margin-bottom: 8px; font-weight: bold; }
+
+        input[type="file"], textarea { 
+            width: 100%; 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            background: rgba(0, 0, 0, 0.2); 
+            color: white; 
+            font-size: 16px; 
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        textarea:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 10px rgba(255, 204, 0, 0.2); }
+
+        .option-group { 
+            display: flex; align-items: center; gap: 12px; 
+            margin-bottom: 25px; 
+            background: rgba(255, 255, 255, 0.03); 
+            padding: 15px; border-radius: 12px; 
+        }
+
+        .btn-gen { 
+            background: linear-gradient(135deg, #ffcc00, #f59e0b); 
+            color: #000; 
+            border: none; 
+            padding: 18px; 
+            border-radius: 16px; 
+            font-weight: 800; 
+            font-size: 18px; 
+            width: 100%; 
+            cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-gen:active { transform: scale(0.98); }
+
+        #preview-area { margin-top: 35px; text-align: center; width: 100%; }
+        
+        #preview-img { 
+            width: 100%; 
+            border-radius: 20px; 
+            border: 2px solid rgba(255, 204, 0, 0.5); 
+            display: none; 
+            margin-bottom: 20px; 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-btn { 
+            display: none; 
+            background: linear-gradient(135deg, #10b981, #059669); 
+            color: white; 
+            text-decoration: none; 
+            padding: 18px; 
+            border-radius: 16px; 
+            font-weight: bold; 
+            text-align: center; 
+            font-size: 18px;
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Rendering Engine - V9 Logic Maintained */
         #render-container { position: absolute; left: -9999px; top: 0; }
         #render-target { width: 1080px; height: 1080px; background: #000; position: relative; overflow: hidden; border: 15px solid white; }
         .post-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; }
@@ -30,7 +124,6 @@
         .post-content { position: absolute; bottom: 90px; width: 100%; padding: 0 65px; text-align: center; box-sizing: border-box; }
         .post-desc { color: #fff; font-family: 'Khand', sans-serif; font-size: 52px; font-weight: 500; line-height: 1.4; letter-spacing: 0.3px; }
         
-        /* V9: Highlight Overlap Fix */
         .highlight { 
             color: var(--accent); 
             font-weight: 700; 
@@ -45,19 +138,20 @@
 </head>
 <body>
 
-<div class="header"><h1>🚩 Baatmi Point Creator V9</h1></div>
+<div class="header"><h1>🚩 Baatmi Point Creator PRO</h1></div>
 
 <div class="main">
     <div class="editor">
-        <label style="font-size: 14px; color: #94a3b8;">१. फोटो निवडा</label>
+        <label>📸 १. फोटो निवडा</label>
         <input type="file" id="uFile" accept="image/*" onchange="loadImg(event)">
         
-        <span class="help-text">💡 महत्वाचे शब्द हायलाईट करण्यासाठी * वापरा (उदा. *ब्रेकिंग*)</span>
-        <textarea id="uDesc" rows="5" placeholder="बातमीचा मजकूर इथे लिहा..."></textarea>
+        <label>✍️ २. बातमीचा मजकूर</label>
+        <span class="help-text">💡 शब्द हायलाईट करण्यासाठी * वापरा (उदा. *ब्रेकिंग*)</span>
+        <textarea id="uDesc" rows="5" placeholder="इथे तुमची बातमी लिहा..."></textarea>
         
         <div class="option-group">
-            <input type="checkbox" id="wMark" checked>
-            <label for="wMark">वॉटरमार्क जोडा (baatmipoint.in)</label>
+            <input type="checkbox" id="wMark" checked style="width: 20px; height: 20px;">
+            <label for="wMark" style="margin: 0; color: white;">ब्रँड वॉटरमार्क जोडा</label>
         </div>
         
         <button class="btn-gen" id="genBtn" onclick="generate()">प्रोफेशनल पोस्ट तयार करा ✨</button>
@@ -94,7 +188,6 @@
     }
 
     function parseHighlight(text) {
-        // शब्दांच्या मध्ये जास्तीची एक स्पेस सोडून HTML तयार करणे
         return text.replace(/\*(.*?)\*/g, '&nbsp;<span class="highlight">$1</span>&nbsp;');
     }
 
@@ -125,7 +218,7 @@
                     previewImg.src = dataUrl;
                     previewImg.style.display = "block";
                     saveBtn.href = dataUrl;
-                    saveBtn.download = "BaatmiPoint_V9_" + Date.now() + ".png";
+                    saveBtn.download = "BaatmiPoint_V10_" + Date.now() + ".png";
                     saveBtn.style.display = "block";
                     btn.innerText = "प्रोफेशनल पोस्ट तयार करा ✨";
                     btn.disabled = false;
@@ -141,4 +234,3 @@
 </script>
 </body>
 </html>
-
