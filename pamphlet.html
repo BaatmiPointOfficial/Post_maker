@@ -3,120 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baatmi Point - Pamphlet NBT Style</title>
-    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700&display=swap" rel="stylesheet">
+    <title>Baatmi Point - Professional Template</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700&family=Khand:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        body { font-family: 'Mukta', sans-serif; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        .editor-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 400px; width: 100%; margin-bottom: 20px; box-sizing: border-box; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        
-        /* पोस्टरची मूळ साईज (बदल करू नये) */
-        #poster-target { 
-            width: 1080px; height: 1350px; background: white; position: relative; overflow: hidden;
-        }
-        .red-curve { 
-            position: absolute; top: 0; left: 0; width: 450px; height: 100%; 
-            background: #d32f2f; clip-path: ellipse(85% 100% at 0% 50%); z-index: 1;
-        }
-        .logo-area { position: absolute; top: 70px; right: 70px; font-size: 90px; font-weight: bold; color: #d32f2f; z-index: 2; }
-        .quote-mark { position: absolute; top: 220px; left: 70px; font-size: 180px; color: #d32f2f; z-index: 2; line-height: 1; }
-        
-        /* मजकूर एरिया - फिक्स */
-        .main-text-container { 
-            position: absolute; top: 420px; left: 120px; right: 120px; 
-            z-index: 2; text-align: left;
-        }
-        /* प्रत्येक ओळीसाठी स्वतंत्र क्लास */
-        .text-line {
-            font-size: 58px; font-weight: 700; color: #222;
-            margin-bottom: 20px; /* ओळींमधील सुरक्षित अंतर */
-            line-height: 1.4; /* वेलांटीसाठी जागा */
-            display: block;
-        }
-        
-        .user-section { position: absolute; bottom: 120px; right: 100px; text-align: center; z-index: 2; }
-        .user-photo { width: 380px; height: 380px; border-radius: 50%; object-fit: cover; border: 12px solid white; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
-        .user-name { font-size: 50px; font-weight: bold; color: #d32f2f; margin-top: 25px; }
+        :root { --main-blue: #1e1b4b; --gold: #ffcc00; --white: #ffffff; }
+        body { font-family: 'Mukta', sans-serif; background: #e2e8f0; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        .editor-box { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 450px; width: 100%; margin-bottom: 30px; }
+        textarea, input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 16px; outline: none; }
+        .btn { background: var(--main-blue); color: var(--gold); border: none; padding: 18px; border-radius: 10px; cursor: pointer; font-size: 18px; width: 100%; font-weight: bold; margin-top: 15px; transition: 0.3s; }
+        .btn:hover { background: #1a1a2e; }
 
-        .btn { background: #d32f2f; color: white; border: none; padding: 18px; border-radius: 10px; cursor: pointer; font-size: 18px; width: 100%; font-weight: bold; margin-top: 10px; }
+        /* फायनल रेंडरिंग एरिया */
+        #render-area { position: absolute; left: -9999px; top: 0; }
+        #poster-target { width: 1080px; height: 1350px; background: var(--white); position: relative; overflow: hidden; }
         
-        /* मोबाईलवर पाहण्यासाठी प्रिव्ह्यू बॉक्स */
-        #preview-wrap { 
-            transform: scale(0.3); transform-origin: top center; 
-            height: 420px; width: 324px; 
-            overflow: hidden; border: 2px solid #ddd; border-radius: 10px;
-            margin-bottom: 50px;
-        }
+        /* नवीन डिझाइन एलिमेन्ट्स */
+        .top-bar { position: absolute; top: 0; width: 100%; height: 120px; background: var(--main-blue); display: flex; align-items: center; padding: 0 80px; box-sizing: border-box; z-index: 2; }
+        .brand-name { font-family: 'Khand', sans-serif; font-size: 60px; color: var(--gold); }
+        
+        .side-border { position: absolute; left: 0; top: 120px; width: 25px; height: 100%; background: var(--gold); z-index: 1; }
+        
+        .main-content { position: absolute; top: 220px; left: 100px; right: 100px; z-index: 3; }
+        .category-tag { background: var(--gold); color: var(--main-blue); padding: 10px 30px; border-radius: 50px; font-weight: bold; font-size: 35px; display: inline-block; margin-bottom: 40px; }
+        
+        /* मराठी टेक्स्ट फिक्स */
+        .headline { font-size: 72px; font-weight: 700; color: var(--main-blue); line-height: 1.5; margin-bottom: 30px; display: block; }
+        .description { font-size: 45px; color: #475569; line-height: 1.6; display: block; }
+
+        .footer-box { position: absolute; bottom: 0; width: 100%; height: 280px; background: #f8fafc; border-top: 5px solid var(--gold); padding: 40px 80px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; z-index: 4; }
+        .user-meta { display: flex; align-items: center; }
+        .user-img { width: 180px; height: 180px; border-radius: 50%; border: 8px solid var(--gold); object-fit: cover; margin-right: 30px; }
+        .user-text { text-align: left; }
+        .u-name { font-size: 45px; font-weight: bold; color: var(--main-blue); }
+        .u-web { font-size: 30px; color: #64748b; font-weight: bold; }
+
+        /* प्रिव्ह्यू */
+        #preview-img { width: 100%; max-width: 350px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); display: none; margin-top: 20px; border: 2px solid var(--main-blue); }
     </style>
 </head>
 <body>
 
     <div class="editor-box">
-        <h3 style="margin-top:0;">टेम्प्लेट १ (NBT स्टाईल)</h3>
-        <textarea id="inText" rows="5" placeholder="येथे मुख्य बातमी लिहा. नवीन ओळीसाठी एंटर दाबा.">येथे तुमचा मजकूर येईल...</textarea>
-        <input type="text" id="inName" placeholder="तुमचे नाव लिहा">
-        <label style="display:block; margin-bottom:5px; font-weight:bold;">फोटो निवडा:</label>
-        <input type="file" accept="image/*" onchange="loadFile(event)">
-        <button class="btn" onclick="downloadImg()">डाउनलोड करा 📥</button>
+        <h2 style="color:var(--main-blue); text-align:center; margin:0 0 20px 0;">Baatmi Point Creator</h2>
+        <input type="text" id="cat" placeholder="वर्ग (उदा. नोकरी अपडेट, शासकीय योजना)" value="नोकरी अपडेट">
+        <textarea id="head" rows="3" placeholder="ठळक बातमी लिहा...">तलाठी भरती २०२६: नवीन जाहिरात प्रसिद्ध!</textarea>
+        <textarea id="desc" rows="4" placeholder="सविस्तर माहिती लिहा...">सर्व पात्र उमेदवारांनी ३१ मार्चपर्यंत ऑनलाईन अर्ज सादर करावेत.</textarea>
+        <input type="text" id="uName" placeholder="तुमचे नाव / वार्ताहर">
+        <input type="file" accept="image/*" onchange="loadImg(event)">
+        <button class="btn" onclick="build()">डिझाईन तयार करा ✨</button>
     </div>
 
-    <div id="preview-wrap">
+    <img id="preview-img" alt="Final Design">
+    <p id="wait" style="display:none; color:var(--main-blue); font-weight:bold;">प्रोसेसिंग सुरू आहे...</p>
+
+    <div id="render-area">
         <div id="poster-target">
-            <div class="red-curve"></div>
-            <div class="logo-area">NBT</div>
-            <div class="quote-mark">“</div>
-            <div class="main-text-container" id="outTextContainer">
-                <div class="text-line">येथे तुमचा मजकूर येईल...</div>
-            </div>
+            <div class="top-bar"><div class="brand-name">BAATMI POINT</div></div>
+            <div class="side-border"></div>
             
-            <div class="user-section">
-                <img id="outPhoto" class="user-photo" src="https://via.placeholder.com/380">
-                <div class="user-name" id="outName">तुमचे नाव</div>
+            <div class="main-content">
+                <div id="out-cat" class="category-tag">नोकरी अपडेट</div>
+                <div id="out-head" class="headline">तलाठी भरती २०२६: नवीन जाहिरात प्रसिद्ध!</div>
+                <div id="out-desc" class="description">सर्व पात्र उमेदवारांनी ३१ मार्चपर्यंत ऑनलाईन अर्ज सादर करावेत.</div>
+            </div>
+
+            <div class="footer-box">
+                <div class="user-meta">
+                    <img id="out-img" class="user-img" src="https://via.placeholder.com/180">
+                    <div class="user-text">
+                        <div id="out-name" class="u-name">तुमचे नाव</div>
+                        <div class="u-web">baatmipoint.in</div>
+                    </div>
+                </div>
+                <div style="font-size: 50px; color: var(--main-blue); font-weight: 800; opacity: 0.1;">#JOB</div>
             </div>
         </div>
     </div>
 
     <script>
-        // फोटो लोड करणे
-        function loadFile(event) {
-            var output = document.getElementById('outPhoto');
-            output.src = URL.createObjectURL(event.target.files[0]);
-        };
+        function loadImg(e) { document.getElementById('out-img').src = URL.createObjectURL(e.target.files[0]); }
 
-        // मजकूर लाईव्ह अपडेट करणे (Line Split Fix)
-        document.getElementById('inText').addEventListener('input', function() {
-            let text = this.value;
-            let lines = text.split('\n'); // एंटर दाबल्यावर नवीन ओळ
-            let htmlStr = '';
-            lines.forEach(line => {
-                if(line.trim() !== '') {
-                    htmlStr += `<div class="text-line">${line}</div>`;
-                }
-            });
-            document.getElementById('outTextContainer').innerHTML = htmlStr;
-        });
+        async function build() {
+            const btn = document.querySelector('.btn');
+            const wait = document.getElementById('wait');
+            const preview = document.getElementById('preview-img');
 
-        document.getElementById('inName').addEventListener('input', function() { document.getElementById('outName').innerText = this.value; });
+            wait.style.display = "block";
+            btn.disabled = true;
 
-        // डाउनलोड फंक्शन (High Quality Fix)
-        async function downloadImg() {
-            // फॉन्ट लोड होण्याची वाट पाहणे
+            // डेटा मॅपिंग
+            document.getElementById('out-cat').innerText = document.getElementById('cat').value;
+            document.getElementById('out-head').innerText = document.getElementById('head').value;
+            document.getElementById('out-desc').innerText = document.getElementById('desc').value;
+            document.getElementById('out-name').innerText = document.getElementById('uName').value || "प्रतिनिधी";
+
             await document.fonts.ready;
 
-            html2canvas(document.getElementById('poster-target'), { 
-                scale: 2, // उच्च गुणवत्ता
-                width: 1080, // फिक्स साईज
-                height: 1350,
-                useCORS: true,
-                backgroundColor: "#ffffff"
-            }).then(canvas => {
-                let link = document.createElement('a');
-                link.download = 'BaatmiPoint_NBT_Style.png';
-                link.href = canvas.toDataURL('image/png', 1.0);
-                link.click();
-            });
+            setTimeout(() => {
+                html2canvas(document.getElementById('poster-target'), {
+                    scale: 2, useCORS: true, backgroundColor: "#ffffff",
+                    width: 1080, height: 1350
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    preview.src = imgData;
+                    preview.style.display = "block";
+                    wait.style.display = "none";
+                    btn.disabled = false;
+
+                    let dl = document.createElement('a');
+                    dl.download = "BaatmiPoint_Pro_" + Date.now() + ".png";
+                    dl.href = imgData;
+                    dl.click();
+                    preview.scrollIntoView({ behavior: 'smooth' });
+                });
+            }, 1200);
         }
     </script>
 </body>
 </html>
+
