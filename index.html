@@ -3,86 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Maker HD - V10</title>
+    <title>Post Maker V12 - 40% Text Area</title>
     <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --accent: #ffcc00; --bg: #0f172a; --card: #1e293b; }
-        body { font-family: 'Mukta', sans-serif; background: var(--bg); color: white; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; -webkit-font-smoothing: antialiased; }
+        body { font-family: 'Mukta', sans-serif; background: var(--bg); color: white; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
         .header { background: var(--card); width: 100%; padding: 15px; text-align: center; border-bottom: 3px solid var(--accent); position: sticky; top: 0; z-index: 100; }
-        .header h1 { margin: 0; font-size: 22px; color: var(--accent); font-family: 'Khand', sans-serif; letter-spacing: 1px; }
+        .header h1 { margin: 0; font-size: 22px; color: var(--accent); font-family: 'Khand', sans-serif; }
         .main { padding: 20px; max-width: 500px; width: 100%; box-sizing: border-box; }
-        .editor { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid #334155; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .help-text { font-size: 13px; color: var(--accent); margin-bottom: 12px; display: block; font-weight: bold; }
-        input[type="file"], textarea { width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 10px; border: 1.5px solid #334155; background: #0f172a; color: white; font-size: 16px; box-sizing: border-box; outline: none; }
-        input:focus, textarea:focus { border-color: var(--accent); }
-        .option-group { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; background: #0f172a; padding: 12px; border-radius: 10px; border: 1px solid #334155; }
-        .btn-gen { background: var(--accent); color: #000; border: none; padding: 16px; border-radius: 12px; font-weight: bold; font-size: 19px; width: 100%; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3); }
+        .editor { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid #334155; }
+        input[type="file"], input[type="text"], textarea { width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 10px; border: 1.5px solid #334155; background: #0f172a; color: white; font-size: 16px; box-sizing: border-box; outline: none; }
+        .btn-gen { background: var(--accent); color: #000; border: none; padding: 16px; border-radius: 12px; font-weight: bold; font-size: 19px; width: 100%; cursor: pointer; }
         
-        #preview-area { margin-top: 25px; text-align: center; width: 100%; }
-        #preview-img { width: 100%; border-radius: 12px; border: 4px solid var(--accent); display: none; margin-bottom: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        #preview-img { width: 100%; border-radius: 12px; border: 4px solid var(--accent); display: none; margin: 20px 0; }
         .download-btn { display: none; background: #10b981; color: white; text-decoration: none; padding: 16px; border-radius: 12px; font-weight: bold; text-align: center; font-size: 19px; }
 
-        /* HD Rendering Engine - V10 */
-        #render-container { position: absolute; left: -9999px; top: 0; }
-        #render-target { width: 1080px; height: 1080px; background: #000; position: relative; overflow: hidden; border: 20px solid white; text-rendering: optimizeLegibility; }
+        /* Rendering Engine - V12 (40% Constraint) */
+        #render-container { position: absolute; left: -9999px; }
+        #render-target { width: 1080px; height: 1080px; background: #000; position: relative; overflow: hidden; border: 20px solid white; }
         .post-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; }
-        .post-overlay { position: absolute; bottom: 0; width: 100%; height: 65%; background: linear-gradient(transparent, rgba(0,0,0,0.7) 20%, rgba(0,0,0,0.95) 90%); }
-        .post-content { position: absolute; bottom: 110px; width: 100%; padding: 0 70px; text-align: center; box-sizing: border-box; }
         
-        /* शब्द संख्या वाढवण्यासाठी फॉन्ट साईज ॲडजस्ट केला */
-        .post-desc { color: #fff; font-family: 'Mukta', sans-serif; font-size: 50px; font-weight: 700; line-height: 1.5; letter-spacing: 0.2px; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        /* ४०% जागा मजकुरासाठी - ७५% वरून ४०% केली */
+        .post-overlay { position: absolute; bottom: 0; width: 100%; height: 45%; background: linear-gradient(transparent, rgba(0,0,0,0.8) 25%, rgba(0,0,0,0.98) 95%); }
+        .post-content { position: absolute; bottom: 105px; width: 100%; padding: 0 75px; text-align: center; box-sizing: border-box; max-height: 400px; overflow: hidden; }
+        .post-desc { color: #fff; font-size: 50px; font-weight: 700; line-height: 1.5; }
         
-        .highlight { 
-            color: var(--accent); 
-            font-family: 'Khand', sans-serif;
-            font-weight: 700; 
-            display: inline-block; 
-            padding: 0 8px; 
-            margin: 0 2px;
-            background: rgba(255, 204, 0, 0.1);
-            border-radius: 5px;
-        } 
+        .highlight { color: var(--accent); font-family: 'Khand', sans-serif; font-weight: 700; display: inline-block; padding: 0 8px; margin: 0 2px; } 
         
-        .post-footer { position: absolute; bottom: 45px; width: 100%; text-align: center; color: white; font-size: 40px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 15px; font-family: 'Khand', sans-serif; }
+        /* फक्त टेक्स्ट वॉटरमार्क (झेंडा काढला) */
+        .post-footer { position: absolute; bottom: 45px; width: 100%; text-align: center; color: white; font-size: 42px; font-weight: bold; font-family: 'Khand', sans-serif; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
-<div class="header"><h1>POST MAKER HD V10</h1></div>
+<div class="header"><h1>POST MAKER HD V12</h1></div>
 
 <div class="main">
     <div class="editor">
-        <label style="font-size: 14px; color: #94a3b8;">१. फोटो निवडा (HD फोटो वापरा)</label>
         <input type="file" id="uFile" accept="image/*" onchange="loadImg(event)">
-        
-        <span class="help-text">💡 महत्वाचे शब्द हायलाईट करण्यासाठी * वापरा (उदा. *ब्रेकिंग*)</span>
-        <textarea id="uDesc" rows="5" placeholder="बातमीचा मजकूर इथे लिहा... (आता तुम्ही जास्त शब्द लिहू शकता)"></textarea>
-        
-        <div class="option-group">
-            <input type="checkbox" id="wMark" checked>
-            <label for="wMark">वॉटरमार्क जोडा (baatmipoint.in)</label>
-        </div>
-        
+        <textarea id="uDesc" rows="4" placeholder="बातमीचा मजकूर (*हायलाईट*)"></textarea>
+        <input type="text" id="uWmark" value="baatmipoint.in" placeholder="वॉटरमार्क">
         <button class="btn-gen" id="genBtn" onclick="generate()">HD पोस्ट तयार करा ✨</button>
     </div>
-
-    <div id="preview-area">
-        <img id="preview-img" alt="Preview">
-        <a id="saveBtn" class="download-btn">गॅलरीमध्ये सेव्ह करा 📥</a>
-    </div>
+    <img id="preview-img" alt="Preview">
+    <a id="saveBtn" class="download-btn">गॅलरीमध्ये सेव्ह करा 📥</a>
 </div>
 
 <div id="render-container">
     <div id="render-target">
         <img id="target-img" class="post-bg">
         <div class="post-overlay"></div>
-        <div class="post-content">
-            <div id="rt-desc" class="post-desc"></div>
-        </div>
-        <div id="rt-foot" class="post-footer">
-            <span style="font-size: 45px; color: var(--accent);">🚩</span> baatmipoint.in
-        </div>
+        <div class="post-content"><div id="rt-desc" class="post-desc"></div></div>
+        <div id="rt-foot" class="post-footer"></div>
     </div>
 </div>
 
@@ -97,47 +70,33 @@
         reader.readAsDataURL(e.target.files[0]);
     }
 
-    function parseHighlight(text) {
-        // मजकूर अधिक स्पष्ट दिसण्यासाठी 'Non-breaking space' वापरली आहे
-        return text.replace(/\*(.*?)\*/g, '&nbsp;<span class="highlight">$1</span>&nbsp;');
-    }
-
     async function generate() {
         const desc = document.getElementById('uDesc').value;
+        const watermarkText = document.getElementById('uWmark').value || "baatmipoint.in";
         const btn = document.getElementById('genBtn');
-        const showWatermark = document.getElementById('wMark').checked;
         
-        if(!targetImg.src || desc.trim() === "") return alert("कृपया फोटो आणि मजकूर भरा!");
+        if(!targetImg.src || desc.trim() === "") return alert("माहिती भरा!");
 
-        document.getElementById('rt-desc').innerHTML = parseHighlight(desc);
-        document.getElementById('rt-foot').style.display = showWatermark ? 'flex' : 'none';
+        document.getElementById('rt-desc').innerHTML = desc.replace(/\*(.*?)\*/g, '&nbsp;<span class="highlight">$1</span>&nbsp;');
+        document.getElementById('rt-foot').innerText = watermarkText; // फक्त मजकूर
 
         btn.innerText = "Ultra-HD Rendering... ⏳";
         btn.disabled = true;
-        saveBtn.style.display = "none";
-        previewImg.style.display = "none";
 
-        // अक्षरांच्या क्लिअरिटीसाठी थोडा वेळ देऊन रेंडरिंग करणे
         setTimeout(() => {
             html2canvas(document.getElementById('render-target'), {
-                scale: 4, // Higher clarity fix
+                scale: 4, 
                 useCORS: true,
-                backgroundColor: "#000",
-                logging: false
+                backgroundColor: "#000"
             }).then(canvas => {
                 const dataUrl = canvas.toDataURL('image/png', 1.0);
                 previewImg.src = dataUrl;
                 previewImg.style.display = "block";
                 saveBtn.href = dataUrl;
-                saveBtn.download = "PostMaker_HD_" + Date.now() + ".png";
+                saveBtn.download = "PostMaker_V12.png";
                 saveBtn.style.display = "block";
                 btn.innerText = "HD पोस्ट तयार करा ✨";
                 btn.disabled = false;
-                previewImg.scrollIntoView({ behavior: 'smooth' });
-            }).catch(err => {
-                alert("काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.");
-                btn.disabled = false;
-                btn.innerText = "HD पोस्ट तयार करा ✨";
             });
         }, 800);
     }
