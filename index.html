@@ -3,27 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Maker V29 - Natural Precision</title>
+    <title>Post Maker V30 - Zen Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --accent: #3ec7ff; --accent-rgb: 62,199,255; --bg: #0f172a; }
+        /* V30: नवीन डीफॉल्ट 'Teal' रंग */
+        :root { --accent: #009688; --accent-rgb: 0,150,136; --bg: #0f172a; }
         body { font-family: 'Mukta', sans-serif; background: #f8fafc; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-        .header { background: #0f172a; width: 100%; padding: 15px; text-align: center; border-bottom: 3px solid var(--accent); position: sticky; top: 0; z-index: 100; }
-        .header h1 { margin: 0; font-size: 22px; color: var(--accent); font-family: 'Khand', sans-serif; letter-spacing: 1px; }
+        .header { background: #0f172a; width: 100%; padding: 15px; text-align: center; border-bottom: 3px solid var(--accent); position: sticky; top: 0; z-index: 100; transition: border-color 0.3s; }
+        .header h1 { margin: 0; font-size: 22px; color: var(--accent); font-family: 'Khand', sans-serif; letter-spacing: 1px; transition: color 0.3s; }
 
         .main { padding: 20px; max-width: 500px; width: 100%; box-sizing: border-box; }
         .editor { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
         
-        /* नवीन रंगांचा संच (लाल रंग काढला आहे) */
+        /* नवीन प्रोफेशनल कलर पॅलेट */
         .color-row { display: flex; align-items: center; gap: 12px; margin: 15px 0; flex-wrap: wrap; padding: 12px; background: #f1f5f9; border-radius: 15px; }
         .c-btn { width: 38px; height: 38px; border-radius: 50%; cursor: pointer; border: 3px solid #fff; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .c-btn.active { border-color: #0f172a; transform: scale(1.1); }
 
-        textarea, input[type="text"] { width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; border: 1.5px solid #e2e8f0; font-size: 16px; box-sizing: border-box; outline: none; }
-        .btn-gen { background: #0f172a; color: var(--accent); border: none; padding: 18px; border-radius: 15px; font-weight: bold; font-size: 19px; width: 100%; cursor: pointer; }
+        textarea, input[type="text"] { width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; border: 1.5px solid #e2e8f0; font-size: 16px; box-sizing: border-box; outline: none; transition: border-color 0.3s; }
+        textarea:focus, input[type="text"]:focus { border-color: var(--accent); }
+        .btn-gen { background: #0f172a; color: var(--accent); border: none; padding: 18px; border-radius: 15px; font-weight: bold; font-size: 19px; width: 100%; cursor: pointer; transition: color 0.3s; }
 
-        /* V29 Rendering Engine */
+        /* V30 Rendering Engine */
         #render-wrap { position: absolute; left: -9999px; }
         #poster { width: 1080px; height: 1080px; background: #000; position: relative; overflow: hidden; border: 20px solid #fff; }
         .post-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; }
@@ -32,26 +34,27 @@
         .post-content { position: absolute; bottom: 140px; left: 100px; right: 100px; text-align: center; height: 380px; display: flex; align-items: center; justify-content: center; z-index: 5; }
         .post-desc { color: #fff; font-size: 52px; font-weight: 700; line-height: 1.65; width: 100%; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
         
-        /* V29: Precision Spacing - घुसणार नाही आणि नैसर्गिक वाटेल */
+        /* V30: 'Zen' Spacing - सर्वात नैसर्गिक आणि सुरक्षित पद्धत */
         .highlight { 
             color: var(--accent); 
             font-family: 'Khand', sans-serif;
             display: inline;
-            padding: 3px 5px; /* उभे पॅडिंग थोड्या जास्त, आडवे संतुलित */
-            margin: 0 1px; /* सूक्ष्म गॅप - घुसण्यापासून रोखण्यासाठी */
-            background: rgba(var(--accent-rgb), 0.12); 
+            /* फक्त पॅडिंग वापरले, मार्जिन नाही. यामुळे नैसर्गिक गॅप तयार होईल. */
+            padding: 2px 5px; 
+            margin: 0; 
+            background: rgba(var(--accent-rgb), 0.15); 
             border-radius: 5px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
         }
 
-        .post-footer { position: absolute; bottom: 50px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 20px; color: #fff; font-size: 45px; font-family: 'Khand', sans-serif; font-weight: bold; }
-        .social-svg { width: 50px; height: 50px; fill: var(--accent); }
+        .post-footer { position: absolute; bottom: 50px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 20px; color: #fff; font-size: 45px; font-family: 'Khand', sans-serif; font-weight: bold; transition: color 0.3s; }
+        .social-svg { width: 50px; height: 50px; fill: var(--accent); transition: fill 0.3s; }
     </style>
 </head>
 <body>
 
-<div class="header"><h1>BAATMI POINT V29</h1></div>
+<div class="header"><h1>BAATMI POINT V30 (Zen)</h1></div>
 
 <div class="main">
     <div class="editor">
@@ -59,10 +62,10 @@
         <textarea id="uDesc" rows="4" placeholder="तुमची बातमी... (*हायलाईट*)"></textarea>
         
         <div class="color-row">
-            <div class="c-btn active" style="background: #3ec7ff;" onclick="setColor('#3ec7ff', '62,199,255', this)"></div>
+            <div class="c-btn active" style="background: #009688;" onclick="setColor('#009688', '0,150,136', this)"></div>
             <div class="c-btn" style="background: #ffcc00;" onclick="setColor('#ffcc00', '255,204,0', this)"></div>
-            <div class="c-btn" style="background: #10b981;" onclick="setColor('#10b981', '16,185,129', this)"></div>
-            <div class="c-btn" style="background: #a855f7;" onclick="setColor('#a855f7', '168,85,247', this)"></div>
+            <div class="c-btn" style="background: #3f51b5;" onclick="setColor('#3f51b5', '63,81,181', this)"></div>
+            <div class="c-btn" style="background: #2e7d32;" onclick="setColor('#2e7d32', '46,125,50', this)"></div>
             <input type="color" id="customColor" oninput="pickColor(this.value)" style="width:38px;height:38px;border:none;cursor:pointer;background:none;">
         </div>
 
@@ -138,7 +141,7 @@
                 previewImg.src = data;
                 previewImg.style.display = "block";
                 saveBtn.href = data;
-                saveBtn.download = "BaatmiPoint_V29.png";
+                saveBtn.download = "BaatmiPoint_V30_Zen.png";
                 saveBtn.style.display = "block";
                 btn.innerText = "HD पोस्ट तयार करा ✨";
                 previewImg.scrollIntoView({ behavior: 'smooth' });
