@@ -3,28 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Maker V31 - Titanium Fix</title>
+    <title>Post Maker V32 - Evolution</title>
     <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* V31: डीफॉल्ट 'Teal' रंग कायम */
         :root { --accent: #009688; --accent-rgb: 0,150,136; --bg: #0f172a; }
         body { font-family: 'Mukta', sans-serif; background: #f8fafc; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-        .header { background: #0f172a; width: 100%; padding: 15px; text-align: center; border-bottom: 3px solid var(--accent); position: sticky; top: 0; z-index: 100; transition: border-color 0.3s; }
-        .header h1 { margin: 0; font-size: 22px; color: var(--accent); font-family: 'Khand', sans-serif; letter-spacing: 1px; transition: color 0.3s; }
+        .header { background: #0f172a; width: 100%; padding: 15px; text-align: center; border-bottom: 3px solid var(--accent); position: sticky; top: 0; z-index: 100; }
+        .header h1 { margin: 0; font-size: 22px; color: var(--accent); font-family: 'Khand', sans-serif; letter-spacing: 1px; }
 
         .main { padding: 20px; max-width: 500px; width: 100%; box-sizing: border-box; }
         .editor { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
+        .section-label { font-size: 13px; font-weight: bold; color: #64748b; margin-bottom: 5px; display: block; }
         
-        .color-row { display: flex; align-items: center; gap: 12px; margin: 15px 0; flex-wrap: wrap; padding: 12px; background: #f1f5f9; border-radius: 15px; }
-        .c-btn { width: 38px; height: 38px; border-radius: 50%; cursor: pointer; border: 3px solid #fff; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        textarea, input[type="text"] { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1.5px solid #e2e8f0; font-size: 16px; box-sizing: border-box; outline: none; }
+        .color-row { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; padding: 10px; background: #f1f5f9; border-radius: 15px; }
+        .c-btn { width: 35px; height: 35px; border-radius: 50%; cursor: pointer; border: 3px solid #fff; transition: 0.2s; }
         .c-btn.active { border-color: #0f172a; transform: scale(1.1); }
+        .btn-gen { background: #0f172a; color: var(--accent); border: none; padding: 18px; border-radius: 15px; font-weight: bold; font-size: 19px; width: 100%; cursor: pointer; }
 
-        textarea, input[type="text"] { width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; border: 1.5px solid #e2e8f0; font-size: 16px; box-sizing: border-box; outline: none; transition: border-color 0.3s; }
-        textarea:focus, input[type="text"]:focus { border-color: var(--accent); }
-        .btn-gen { background: #0f172a; color: var(--accent); border: none; padding: 18px; border-radius: 15px; font-weight: bold; font-size: 19px; width: 100%; cursor: pointer; transition: color 0.3s; }
-
-        /* V31 Rendering Engine */
+        /* V32 Rendering Engine */
         #render-wrap { position: absolute; left: -9999px; }
         #poster { width: 1080px; height: 1080px; background: #000; position: relative; overflow: hidden; border: 20px solid #fff; }
         .post-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; }
@@ -33,48 +31,44 @@
         .post-content { position: absolute; bottom: 140px; left: 100px; right: 100px; text-align: center; height: 380px; display: flex; align-items: center; justify-content: center; z-index: 5; }
         .post-desc { color: #fff; font-size: 52px; font-weight: 700; line-height: 1.65; width: 100%; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
         
-        /* V31: 'Titanium' Spacing - द अदृश्य ढाल (The Invisible Shield) */
+        /* V32: सुबक हायलाईट - नो बॉक्स फिलींग */
         .highlight { 
             color: var(--accent); 
             font-family: 'Khand', sans-serif;
             display: inline;
-            padding: 3px 4px; /* बॉक्सला आतून थोडी जागा */
-            margin: 0; /* बाहेरून कोणतेही मार्जिन नाही */
-            background: rgba(var(--accent-rgb), 0.15); 
-            border-radius: 4px;
+            padding: 1px 6px; 
+            margin: 0; 
+            background: rgba(var(--accent-rgb), 0.12); /* अत्यंत सौम्य बॅकग्राउंड */
+            border-radius: 8px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
         }
 
-        /* हे आहे ते 'Titanium' सोल्युशन - एक अदृश्य भिंत */
-        .highlight::before {
-            content: "";
-            display: inline-block;
-            width: 3px; /* ही 3px ची जागा मागच्या शब्दाला थांबवेल */
-            height: 1px;
-        }
-
-        .post-footer { position: absolute; bottom: 50px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 20px; color: #fff; font-size: 45px; font-family: 'Khand', sans-serif; font-weight: bold; transition: color 0.3s; }
-        .social-svg { width: 50px; height: 50px; fill: var(--accent); transition: fill 0.3s; }
+        .post-footer { position: absolute; bottom: 50px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 20px; color: #fff; font-size: 45px; font-family: 'Khand', sans-serif; font-weight: bold; }
+        .social-svg { width: 50px; height: 50px; fill: var(--accent); }
     </style>
 </head>
 <body>
 
-<div class="header"><h1>BAATMI POINT V31 (Titanium)</h1></div>
+<div class="header"><h1>BAATMI POINT V32</h1></div>
 
 <div class="main">
     <div class="editor">
-        <input type="file" id="uFile" accept="image/*" onchange="loadImg(event)">
-        <textarea id="uDesc" rows="4" placeholder="तुमची बातमी... (*हायलाईट*)"></textarea>
+        <span class="section-label">१. बातमीचा मजकूर</span>
+        <textarea id="uDesc" rows="4" placeholder="येथे तुमची बातमी लिहा..."></textarea>
         
+        <span class="section-label">२. हायलाईट करायचे शब्द (स्वल्पविराम द्या)</span>
+        <input type="text" id="uWords" placeholder="उदा. नगरसेविका, सहर शेख, अजित पवार">
+        
+        <span class="section-label">३. हायलाईट रंग निवडा</span>
         <div class="color-row">
             <div class="c-btn active" style="background: #009688;" onclick="setColor('#009688', '0,150,136', this)"></div>
             <div class="c-btn" style="background: #ffcc00;" onclick="setColor('#ffcc00', '255,204,0', this)"></div>
-            <div class="c-btn" style="background: #3f51b5;" onclick="setColor('#3f51b5', '63,81,181', this)"></div>
-            <div class="c-btn" style="background: #2e7d32;" onclick="setColor('#2e7d32', '46,125,50', this)"></div>
-            <input type="color" id="customColor" oninput="pickColor(this.value)" style="width:38px;height:38px;border:none;cursor:pointer;background:none;">
+            <div class="c-btn" style="background: #0ea5e9;" onclick="setColor('#0ea5e9', '14,165,233', this)"></div>
+            <input type="color" id="customColor" oninput="pickColor(this.value)" style="width:35px;height:35px;border:none;cursor:pointer;background:none;">
         </div>
 
+        <input type="file" id="uFile" accept="image/*" onchange="loadImg(event)" style="margin-bottom:15px;">
         <input type="text" id="uWmark" value="baatmipoint.in">
         <button class="btn-gen" id="genBtn" onclick="generate()">HD पोस्ट तयार करा ✨</button>
     </div>
@@ -117,26 +111,31 @@
         reader.readAsDataURL(e.target.files[0]);
     }
 
-    function adjustFontSize() {
-        const el = document.getElementById('rt-desc');
-        const container = document.querySelector('.post-content');
-        let size = 52; 
-        el.style.fontSize = size + 'px';
-        while ((el.scrollHeight > container.offsetHeight || el.scrollWidth > container.offsetWidth) && size > 25) {
-            size--;
-            el.style.fontSize = size + 'px';
-        }
-    }
-
     async function generate() {
-        const desc = document.getElementById('uDesc').value;
-        const btn = document.getElementById('genBtn');
-        if(!document.getElementById('target-img').src || desc.trim() === "") return alert("माहिती भरा!");
+        let text = document.getElementById('uDesc').value;
+        const words = document.getElementById('uWords').value.split(',').map(w => w.trim()).filter(w => w !== "");
+        
+        if(!document.getElementById('target-img').src || text.trim() === "") return alert("माहिती भरा!");
 
-        document.getElementById('rt-desc').innerHTML = desc.replace(/\*(.*?)\*/g, '<span class="highlight">$1</span>');
+        // नवीन सिस्टीम: शब्दांना सुरक्षित स्पेससह रिप्लेस करा
+        words.forEach(word => {
+            const regex = new RegExp(word, 'g');
+            // येथे आपण शब्दाच्या आधी एक अदृश्य स्पेस (&nbsp;) जोडत आहोत
+            text = text.replace(regex, `&nbsp;<span class="highlight">${word}</span>&nbsp;`);
+        });
+
+        document.getElementById('rt-desc').innerHTML = text;
         document.getElementById('rt-foot').innerText = document.getElementById('uWmark').value;
         
-        adjustFontSize();
+        // Font resize logic
+        const el = document.getElementById('rt-desc');
+        const container = document.querySelector('.post-content');
+        let size = 52; el.style.fontSize = size + 'px';
+        while ((el.scrollHeight > container.offsetHeight || el.scrollWidth > container.offsetWidth) && size > 25) {
+            size--; el.style.fontSize = size + 'px';
+        }
+
+        const btn = document.getElementById('genBtn');
         btn.innerText = "Processing... ⏳";
         
         setTimeout(() => {
@@ -147,7 +146,7 @@
                 previewImg.src = data;
                 previewImg.style.display = "block";
                 saveBtn.href = data;
-                saveBtn.download = "BaatmiPoint_V31_Titanium.png";
+                saveBtn.download = "BaatmiPoint_V32.png";
                 saveBtn.style.display = "block";
                 btn.innerText = "HD पोस्ट तयार करा ✨";
                 previewImg.scrollIntoView({ behavior: 'smooth' });
