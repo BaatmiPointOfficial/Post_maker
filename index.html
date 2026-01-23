@@ -3,81 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Maker V34 - Universal Palette</title>
-    <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
+    <title>Baatmi Point V39 - Cyber Newsroom</title>
+    <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Mukta:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* V34: 'Classic Gold' आता डीफॉल्ट रंग असेल */
-        :root { --accent: #ffcc00; --accent-rgb: 255,204,0; --bg: #0f172a; }
-        body { font-family: 'Mukta', sans-serif; background: #f1f5f9; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-        .header { background: #0f172a; width: 100%; padding: 15px; text-align: center; border-bottom: 3px solid var(--accent); position: sticky; top: 0; z-index: 100; }
-        .header h1 { margin: 0; font-size: 22px; color: var(--accent); font-family: 'Khand', sans-serif; letter-spacing: 1px; }
+        /* V39: 'Cyber Gold' कलर पॅलेट */
+        :root {
+            --bg-dark: #0c1017;
+            --card-dark: #161b22;
+            --accent-gold: #ffd700; /* गोल्ड कलर */
+            --text-light: #e6edf3;
+            --text-muted: #8b949e;
+            --glow-gold: 0 0 15px rgba(255, 215, 0, 0.3);
+            --border-gold: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        body {
+            font-family: 'Mukta', sans-serif;
+            background-color: var(--bg-dark);
+            /* सायबर टेक्सचर बॅकग्राउंड */
+            background-image: radial-gradient(circle at top right, rgba(22, 27, 34, 0.8) 0%, rgba(12, 16, 23, 1) 100%);
+            margin: 0;
+            padding: 0;
+            color: var(--text-light);
+        }
+        
+        /* प्रीमियम हेडर */
+        .header {
+            padding: 25px 20px;
+            text-align: center;
+            background: transparent;
+            border-bottom: 2px solid var(--accent-gold);
+            box-shadow: var(--glow-gold);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+            color: var(--accent-gold);
+            font-family: 'Playfair Display', serif; /* प्रीमियम सेरीफ फॉन्ट */
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.2);
+        }
 
-        .main { padding: 20px; max-width: 500px; width: 100%; box-sizing: border-box; }
-        .editor { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
-        .section-label { font-size: 13px; font-weight: bold; color: #64748b; margin-bottom: 5px; display: block; }
+        .container { padding: 30px 20px; max-width: 550px; margin: 0 auto; }
         
-        textarea, input[type="text"] { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1.5px solid #e2e8f0; font-size: 16px; box-sizing: border-box; outline: none; }
+        /* सायबर कार्ड्स */
+        .card {
+            background: var(--card-dark);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            border: var(--border-gold);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.2); /* डेप्थ इफेक्ट */
+            backdrop-filter: blur(5px);
+        }
         
-        /* फायनल रंगांची बटणे */
-        .color-row { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; padding: 10px; background: #f8fafc; border-radius: 15px; }
-        .c-btn { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; border: 3px solid #fff; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .c-btn.active { border-color: #0f172a; transform: scale(1.1); }
-        
-        .btn-gen { background: #0f172a; color: var(--accent); border: none; padding: 18px; border-radius: 15px; font-weight: bold; font-size: 19px; width: 100%; cursor: pointer; }
+        .section-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-        /* V34 Rendering Engine */
+        /* सायबर इनपुट्स */
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 18px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 215, 0, 0.1);
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+            background: rgba(12, 16, 23, 0.8);
+            color: var(--text-light);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+        }
+        textarea:focus, input[type="text"]:focus {
+            border-color: var(--accent-gold);
+            box-shadow: var(--glow-gold);
+        }
+        textarea::placeholder, input::placeholder { color: var(--text-muted); }
+
+        /* ग्लोइंग कलर बटन्स */
+        .color-row { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; padding: 15px 0; }
+        .c-btn {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid rgba(255,255,255,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: 0.3s;
+            position: relative;
+        }
+        /* ऍक्टिव्ह बटणाला निऑन ग्लो */
+        .c-btn.active {
+            border-color: var(--accent-gold);
+            transform: scale(1.15);
+            box-shadow: 0 0 25px var(--accent-color); /* डायनॅमिक ग्लो */
+        }
+        /* प्रत्येक रंगाचा स्वतःचा ग्लो */
+        .c-btn[style*="#ffcc00"].active { --accent-color: rgba(255, 204, 0, 0.6); }
+        .c-btn[style*="#3ec7ff"].active { --accent-color: rgba(62, 199, 255, 0.6); }
+        .c-btn[style*="#10b981"].active { --accent-color: rgba(16, 185, 129, 0.6); }
+        .c-btn[style*="#e11d48"].active { --accent-color: rgba(225, 29, 72, 0.6); }
+
+        /* प्रीमियम फाईल अपलोडर */
+        .custom-file-btn {
+            background: rgba(12, 16, 23, 0.6);
+            color: var(--accent-gold);
+            padding: 18px;
+            border-radius: 15px;
+            display: block;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+            text-align: center;
+            border: 2px dashed rgba(255, 215, 0, 0.3);
+            transition: 0.3s;
+        }
+        .custom-file-btn:hover {
+            background: rgba(255, 215, 0, 0.05);
+            border-color: var(--accent-gold);
+            box-shadow: var(--glow-gold);
+        }
+
+        /* गोल्ड बटण */
+        .btn-main {
+            background: linear-gradient(135deg, #ffd700 0%, #e1b700 100%);
+            color: #0c1017;
+            border: none;
+            padding: 22px;
+            border-radius: 18px;
+            font-weight: 800;
+            font-size: 22px;
+            width: 100%;
+            cursor: pointer;
+            font-family: 'Khand', sans-serif;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5); }
+        .btn-main:active { transform: scale(0.98); }
+
+        #preview-area { margin-top: 40px; text-align: center; }
+        #preview {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            border: 3px solid var(--accent-gold);
+            display: none;
+        }
+        .save-link {
+            display: none;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            text-decoration: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 25px;
+            font-size: 18px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Rendering Canvas (Hidden) - V38 Logic */
         #render-wrap { position: absolute; left: -9999px; }
         #poster { width: 1080px; height: 1080px; background: #000; position: relative; overflow: hidden; border: 20px solid #fff; }
         .post-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; }
         .post-overlay { position: absolute; bottom: 0; width: 100%; height: 50%; background: linear-gradient(transparent, rgba(0,0,0,1) 48%, #000); }
         .post-content { position: absolute; bottom: 140px; left: 100px; right: 100px; text-align: center; height: 380px; display: flex; align-items: center; justify-content: center; z-index: 5; }
-        .post-desc { color: #fff; font-size: 52px; font-weight: 700; line-height: 1.65; width: 100%; text-shadow: 1px 1px 8px rgba(0,0,0,0.4); }
-        
-        /* V34: सुबक हायलाईट (Clean & Natural) */
-        .highlight { 
-            color: var(--accent); 
-            font-family: 'Khand', sans-serif;
-            display: inline;
-            padding: 1px 4px;
-            margin: 0 2px;
-            background: rgba(var(--accent-rgb), 0.10); 
-            border-radius: 6px;
-            box-decoration-break: clone;
-            -webkit-box-decoration-break: clone;
-        }
-
+        .post-desc { color: #fff; font-size: 52px; font-weight: 700; line-height: 1.65; width: 100%; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        .highlight { color: var(--accent); font-family: 'Khand', sans-serif; font-weight: 800; display: inline; }
         .post-footer { position: absolute; bottom: 50px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 20px; color: #fff; font-size: 45px; font-family: 'Khand', sans-serif; font-weight: bold; }
-        .social-svg { width: 50px; height: 50px; fill: var(--accent); }
+        .social-svg { width: 52px; height: 52px; fill: var(--accent); }
     </style>
 </head>
 <body>
 
-<div class="header"><h1>POST MAKER V34 (Final Colors)</h1></div>
+<div class="header">
+    <h1>BAATMI POINT V39</h1>
+</div>
 
-<div class="main">
-    <div class="editor">
-        <span class="section-label">१. बातमी लिहा</span>
-        <textarea id="uDesc" rows="4" placeholder="मजकूर येथे लिहा..."></textarea>
-        
-        <span class="section-label">२. हायलाईट शब्द (उदा. नाव, ठिकाण)</span>
-        <input type="text" id="uWords" placeholder="कोमा देऊन लिहा: शब्द १, शब्द २">
-        
-        <span class="section-label">३. फायनल रंग निवडा</span>
-        <div class="color-row">
-            <div class="c-btn active" style="background: #ffcc00;" onclick="setColor('#ffcc00', '255,204,0', this)"></div>
-            <div class="c-btn" style="background: #3ec7ff;" onclick="setColor('#3ec7ff', '62,199,255', this)"></div>
-            <div class="c-btn" style="background: #10b981;" onclick="setColor('#10b981', '16,185,129', this)"></div>
-            <div class="c-btn" style="background: #e11d48;" onclick="setColor('#e11d48', '225,29,72', this)"></div>
-            <input type="color" id="customColor" oninput="pickColor(this.value)" style="width:35px;height:35px;border:none;cursor:pointer;background:none;">
-        </div>
-
-        <input type="file" id="uFile" accept="image/*" onchange="loadImg(event)" style="margin-bottom:15px;">
-        <input type="text" id="uWmark" value="baatmipoint.in">
-        <button class="btn-gen" id="genBtn" onclick="generate()">HD पोस्ट तयार करा ✨</button>
+<div class="container">
+    <div class="card">
+        <span class="section-label">📰 बातमी आणि शब्द</span>
+        <textarea id="uDesc" rows="4" placeholder="येथे बातमी टाइप करा..."></textarea>
+        <div style="margin-top:20px;"></div>
+        <input type="text" id="uWords" placeholder="हायलाईट शब्द (स्वल्पविराम द्या)">
     </div>
-    <img id="preview" style="width:100%; display:none; margin-top:25px; border-radius:15px; border: 5px solid #0f172a;">
-    <a id="saveBtn" style="display:none; background:#10b981; color:white; text-decoration:none; padding:18px; border-radius:12px; font-weight:bold; text-align:center; margin-top:12px;">गॅलरीमध्ये सेव्ह करा 📥</a>
+
+    <div class="card">
+        <span class="section-label">🎨 हायलाईट रंग निवडा</span>
+        <div class="color-row">
+            <div class="c-btn active" style="background: #ffcc00;" onclick="setColor('#ffcc00', this)"></div>
+            <div class="c-btn" style="background: #3ec7ff;" onclick="setColor('#3ec7ff', this)"></div>
+            <div class="c-btn" style="background: #10b981;" onclick="setColor('#10b981', this)"></div>
+            <div class="c-btn" style="background: #e11d48;" onclick="setColor('#e11d48', this)"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <span class="section-label">📸 मीडिया आणि ब्रँडिंग</span>
+        <label class="custom-file-btn">
+            🖼️ बातमीचा फोटो निवडा
+            <input type="file" id="uFile" accept="image/*" onchange="loadImg(event)">
+        </label>
+        <div style="margin-top:20px;"></div>
+        <input type="text" id="uWmark" value="baatmipoint.in" placeholder="वॉटरमार्क">
+    </div>
+
+    <button class="btn-main" id="genBtn" onclick="generate()">HD पोस्ट तयार करा ✨</button>
+
+    <div id="preview-area">
+        <img id="preview">
+        <a id="saveBtn" class="save-link">📥 गॅलरीमध्ये सेव्ह करा</a>
+    </div>
 </div>
 
 <div id="render-wrap">
@@ -93,21 +242,12 @@
 </div>
 
 <script>
-    function hexToRgb(hex) {
-        let r = parseInt(hex.slice(1, 3), 16);
-        let g = parseInt(hex.slice(3, 5), 16);
-        let b = parseInt(hex.slice(5, 7), 16);
-        return `${r},${g},${b}`;
-    }
-
-    function setColor(hex, rgb, btn) {
+    // V38 मधील JavaScript लॉजिक जसेच्या तसे
+    function setColor(hex, btn) {
         document.documentElement.style.setProperty('--accent', hex);
-        document.documentElement.style.setProperty('--accent-rgb', rgb);
         document.querySelectorAll('.c-btn').forEach(x => x.classList.remove('active'));
         if(btn) btn.classList.add('active');
     }
-
-    function pickColor(hex) { setColor(hex, hexToRgb(hex), null); }
 
     function loadImg(e) {
         const reader = new FileReader();
@@ -121,9 +261,8 @@
         const words = wordsInput ? wordsInput.split(',').map(w => w.trim()).filter(w => w !== "") : [];
         const btn = document.getElementById('genBtn');
 
-        if(!document.getElementById('target-img').src || text.trim() === "") return alert("माहिती भरा!");
+        if(!document.getElementById('target-img').src || text.trim() === "") return alert("कृपया फोटो आणि मजकूर भरा!");
 
-        // हायलाईट लॉजिक
         words.forEach(word => {
             const regex = new RegExp(word, 'g');
             text = text.replace(regex, `<span class="highlight">${word}</span>`);
@@ -139,7 +278,7 @@
             size--; el.style.fontSize = size + 'px';
         }
 
-        btn.innerText = "Processing HD... ⏳";
+        btn.innerText = "प्रोसेसिंग होत आहे... ⏳";
         
         setTimeout(() => {
             html2canvas(document.getElementById('poster'), { scale: 4, useCORS: true }).then(canvas => {
@@ -147,7 +286,7 @@
                 const previewImg = document.getElementById('preview');
                 const saveBtn = document.getElementById('saveBtn');
                 previewImg.src = data; previewImg.style.display = "block";
-                saveBtn.href = data; saveBtn.download = "BaatmiPoint_V34.png";
+                saveBtn.href = data; saveBtn.download = "BaatmiPoint_Cyber.png";
                 saveBtn.style.display = "block";
                 btn.innerText = "HD पोस्ट तयार करा ✨";
                 previewImg.scrollIntoView({ behavior: 'smooth' });
