@@ -3,100 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Maker V27 - Master Edition</title>
+    <title>Post Maker V29 - Natural Precision</title>
     <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --accent: #ffcc00; --accent-rgb: 255,204,0; --bg: #0f172a; }
+        :root { --accent: #3ec7ff; --accent-rgb: 62,199,255; --bg: #0f172a; }
         body { font-family: 'Mukta', sans-serif; background: #f8fafc; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
         .header { background: #0f172a; width: 100%; padding: 15px; text-align: center; border-bottom: 3px solid var(--accent); position: sticky; top: 0; z-index: 100; }
         .header h1 { margin: 0; font-size: 22px; color: var(--accent); font-family: 'Khand', sans-serif; letter-spacing: 1px; }
 
         .main { padding: 20px; max-width: 500px; width: 100%; box-sizing: border-box; }
-        .editor { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 15px 45px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }
+        .editor { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
         
-        /* प्रोफेशनल कलर पॅलेट */
+        /* नवीन रंगांचा संच (लाल रंग काढला आहे) */
         .color-row { display: flex; align-items: center; gap: 12px; margin: 15px 0; flex-wrap: wrap; padding: 12px; background: #f1f5f9; border-radius: 15px; }
-        .c-btn { width: 38px; height: 38px; border-radius: 50%; cursor: pointer; border: 3px solid #fff; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .c-btn.active { border-color: #0f172a; transform: scale(1.15); }
-        .picker-box { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #64748b; font-weight: bold; }
+        .c-btn { width: 38px; height: 38px; border-radius: 50%; cursor: pointer; border: 3px solid #fff; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .c-btn.active { border-color: #0f172a; transform: scale(1.1); }
 
-        textarea, input[type="text"] { width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; border: 1.5px solid #e2e8f0; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        textarea:focus { border-color: var(--accent); }
-        .btn-gen { background: #0f172a; color: var(--accent); border: none; padding: 18px; border-radius: 15px; font-weight: bold; font-size: 19px; width: 100%; cursor: pointer; box-shadow: 0 4px 15px rgba(15, 23, 42, 0.2); }
+        textarea, input[type="text"] { width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; border: 1.5px solid #e2e8f0; font-size: 16px; box-sizing: border-box; outline: none; }
+        .btn-gen { background: #0f172a; color: var(--accent); border: none; padding: 18px; border-radius: 15px; font-weight: bold; font-size: 19px; width: 100%; cursor: pointer; }
 
-        /* V27 Rendering Engine - Precision Layout */
+        /* V29 Rendering Engine */
         #render-wrap { position: absolute; left: -9999px; }
         #poster { width: 1080px; height: 1080px; background: #000; position: relative; overflow: hidden; border: 20px solid #fff; }
         .post-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; }
+        .post-overlay { position: absolute; bottom: 0; width: 100%; height: 50%; background: linear-gradient(transparent, rgba(0,0,0,1) 48%, #000); }
         
-        /* मजकूर स्पष्टतेसाठी ५०% ओव्हरले */
-        .post-overlay { position: absolute; bottom: 0; width: 100%; height: 50%; background: linear-gradient(transparent, rgba(0,0,0,0.98) 45%, #000); }
+        .post-content { position: absolute; bottom: 140px; left: 100px; right: 100px; text-align: center; height: 380px; display: flex; align-items: center; justify-content: center; z-index: 5; }
+        .post-desc { color: #fff; font-size: 52px; font-weight: 700; line-height: 1.65; width: 100%; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
         
-        /* No-Cut Safe Zone (100px padding) */
-        .post-content { 
-            position: absolute; 
-            bottom: 140px; 
-            left: 100px; 
-            right: 100px; 
-            text-align: center; 
-            height: 380px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            z-index: 5;
-        }
-        .post-desc { 
-            color: #fff; 
-            font-size: 52px; 
-            font-weight: 700; 
-            line-height: 1.6; 
-            width: 100%;
-            text-shadow: 2px 2px 12px rgba(0,0,0,0.6);
-            word-wrap: break-word;
-        }
-        
+        /* V29: Precision Spacing - घुसणार नाही आणि नैसर्गिक वाटेल */
         .highlight { 
             color: var(--accent); 
             font-family: 'Khand', sans-serif;
             display: inline;
-            padding: 2px 5px;
-            margin: 0 -1px;
+            padding: 3px 5px; /* उभे पॅडिंग थोड्या जास्त, आडवे संतुलित */
+            margin: 0 1px; /* सूक्ष्म गॅप - घुसण्यापासून रोखण्यासाठी */
             background: rgba(var(--accent-rgb), 0.12); 
-            border-radius: 6px;
+            border-radius: 5px;
             box-decoration-break: clone;
             -webkit-box-decoration-break: clone;
         }
 
         .post-footer { position: absolute; bottom: 50px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 20px; color: #fff; font-size: 45px; font-family: 'Khand', sans-serif; font-weight: bold; }
-        .social-svg { width: 52px; height: 52px; fill: var(--accent); }
+        .social-svg { width: 50px; height: 50px; fill: var(--accent); }
     </style>
 </head>
 <body>
 
-<div class="header"><h1>BAATMI POINT MASTER V27</h1></div>
+<div class="header"><h1>BAATMI POINT V29</h1></div>
 
 <div class="main">
     <div class="editor">
         <input type="file" id="uFile" accept="image/*" onchange="loadImg(event)">
-        <textarea id="uDesc" rows="4" placeholder="बातमीचा मजकूर (*हायलाईट*)"></textarea>
+        <textarea id="uDesc" rows="4" placeholder="तुमची बातमी... (*हायलाईट*)"></textarea>
         
         <div class="color-row">
-            <div class="c-btn active" style="background: #ffcc00;" onclick="setColor('#ffcc00', '255,204,0', this)"></div>
-            <div class="c-btn" style="background: #e11d48;" onclick="setColor('#e11d48', '225,29,72', this)"></div>
-            <div class="c-btn" style="background: #0ea5e9;" onclick="setColor('#0ea5e9', '14,165,233', this)"></div>
+            <div class="c-btn active" style="background: #3ec7ff;" onclick="setColor('#3ec7ff', '62,199,255', this)"></div>
+            <div class="c-btn" style="background: #ffcc00;" onclick="setColor('#ffcc00', '255,204,0', this)"></div>
             <div class="c-btn" style="background: #10b981;" onclick="setColor('#10b981', '16,185,129', this)"></div>
-            <div class="picker-box">
-                <input type="color" id="customColor" oninput="pickColor(this.value)" style="width:35px;height:35px;border:none;cursor:pointer;background:none;">
-                <span>CUSTOM</span>
-            </div>
+            <div class="c-btn" style="background: #a855f7;" onclick="setColor('#a855f7', '168,85,247', this)"></div>
+            <input type="color" id="customColor" oninput="pickColor(this.value)" style="width:38px;height:38px;border:none;cursor:pointer;background:none;">
         </div>
 
         <input type="text" id="uWmark" value="baatmipoint.in">
         <button class="btn-gen" id="genBtn" onclick="generate()">HD पोस्ट तयार करा ✨</button>
     </div>
-    <img id="preview" style="width:100%; display:none; margin-top:25px; border-radius:15px; border: 5px solid #0f172a; box-shadow: 0 20px 50px rgba(0,0,0,0.15);">
-    <a id="saveBtn" style="display:none; background:#10b981; color:white; text-decoration:none; padding:18px; border-radius:12px; font-weight:bold; text-align:center; margin-top:12px;">गॅलरीमध्ये सेव्ह करा 📥</a>
+    <img id="preview" style="width:100%; display:none; margin-top:25px; border-radius:15px; border: 5px solid #0f172a;">
+    <a id="saveBtn" style="display:none; background:#10b981; color:white; text-decoration:none; padding:18px; border-radius:12px; font-weight:bold; text-align:center; margin-top:12px;">सेव्ह करा 📥</a>
 </div>
 
 <div id="render-wrap">
@@ -139,8 +113,6 @@
         const container = document.querySelector('.post-content');
         let size = 52; 
         el.style.fontSize = size + 'px';
-        
-        // V27 FIX: Height आणि Width दोन्ही तपासणे (No-Cut Logic)
         while ((el.scrollHeight > container.offsetHeight || el.scrollWidth > container.offsetWidth) && size > 25) {
             size--;
             el.style.fontSize = size + 'px';
@@ -156,22 +128,17 @@
         document.getElementById('rt-foot').innerText = document.getElementById('uWmark').value;
         
         adjustFontSize();
-        btn.innerText = "प्रोसेसिंग... ⏳";
+        btn.innerText = "Processing... ⏳";
         
         setTimeout(() => {
-            html2canvas(document.getElementById('poster'), { 
-                scale: 4, // Ultra-HD
-                useCORS: true,
-                logging: false,
-                backgroundColor: "#000"
-            }).then(canvas => {
+            html2canvas(document.getElementById('poster'), { scale: 4, useCORS: true }).then(canvas => {
                 const data = canvas.toDataURL('image/png', 1.0);
                 const previewImg = document.getElementById('preview');
                 const saveBtn = document.getElementById('saveBtn');
                 previewImg.src = data;
                 previewImg.style.display = "block";
                 saveBtn.href = data;
-                saveBtn.download = "BaatmiPoint_V27_Master.png";
+                saveBtn.download = "BaatmiPoint_V29.png";
                 saveBtn.style.display = "block";
                 btn.innerText = "HD पोस्ट तयार करा ✨";
                 previewImg.scrollIntoView({ behavior: 'smooth' });
