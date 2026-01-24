@@ -3,72 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baatmi Point V41 - Bottom Precision</title>
+    <title>Baatmi Point V42 - AutoFit & BottomLock</title>
     <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700;800&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
+        /* इंटरफेस स्टाईल (V41 प्रमाणेच Cyber Dark) */
         :root { --bg: #020617; --card: rgba(30, 41, 59, 0.7); --accent: #ffd700; --neon: #38bdf8; --text: #f1f5f9; }
         body { font-family: 'Mukta', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--text); }
-        
-        .header { background: rgba(15, 23, 42, 0.9); padding: 25px; text-align: center; border-bottom: 2px solid var(--neon); backdrop-filter: blur(10px); }
+        .header { background: rgba(15, 23, 42, 0.9); padding: 25px; text-align: center; border-bottom: 2px solid var(--neon); backdrop-filter: blur(10px); position: sticky; top:0; z-index: 100; }
         .header h1 { margin: 0; font-size: 28px; color: var(--neon); font-family: 'Khand', sans-serif; letter-spacing: 2px; text-transform: uppercase; }
-
         .container { padding: 20px; max-width: 550px; margin: 0 auto; }
         .card { background: var(--card); padding: 25px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 25px; backdrop-filter: blur(16px); }
         .label { font-size: 14px; font-weight: 800; color: var(--neon); margin-bottom: 15px; display: block; text-transform: uppercase; }
-
         textarea, input[type="text"] { width: 100%; padding: 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(15, 23, 42, 0.6); color: #fff; margin-bottom: 12px; outline: none; box-sizing: border-box; font-size: 16px; }
-
         .color-row { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; padding: 10px 0; }
         .c-btn { width: 55px; height: 55px; border-radius: 14px; cursor: pointer; border: 3px solid rgba(255,255,255,0.1); transition: 0.3s; }
         .c-btn.active { border-color: #fff; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-
         .file-label { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #fff; padding: 18px; border-radius: 14px; display: block; text-align: center; cursor: pointer; font-weight: 700; border: 1px solid rgba(56, 189, 248, 0.2); }
         .btn-gen { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); color: #020617; border: none; padding: 22px; border-radius: 20px; font-weight: 900; font-size: 22px; width: 100%; cursor: pointer; font-family: 'Khand', sans-serif; text-transform: uppercase; margin-top: 10px; }
 
-        /* V41 Rendering Engine - Bottom 40% Logic */
+        /* --- V42 Rendering Engine (Deep Think Fixes) --- */
         #render-wrap { position: absolute; left: -9999px; }
         #poster { width: 1080px; height: 1080px; background: #000; position: relative; overflow: hidden; border: 10px solid #fff; box-sizing: border-box; }
-        #target-img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
         
-        /* डार्क ग्रेडियंट (खालून ५०% पर्यंत) */
+        /* 1. Auto-Crop Fix: object-fit: cover फोटोला चौकोनात फिट करेल */
+        #target-img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1; }
+        
+        /* 2. डार्क ओव्हरले: तळाशी अधिक गडद केला आहे */
         .post-overlay { 
-            position: absolute; bottom: 0; width: 100%; height: 50%; 
-            background: linear-gradient(transparent, rgba(0,0,0,0.95) 45%, #000); 
+            position: absolute; bottom: 0; width: 100%; height: 55%; 
+            background: linear-gradient(to top, #000 15%, rgba(0,0,0,0.85) 50%, transparent); 
             z-index: 2;
         }
         
-        /* मजकूर कंटेनर - तळापासून बरोबर ४०% जागेत मर्यादित */
+        /* 3. Bottom Lock Fix: मजकूर खाली चिकटवण्यासाठी */
         .post-content { 
             position: absolute; 
-            bottom: 150px; /* फुटरच्या वर */
-            left: 80px; right: 80px; 
-            height: 432px; /* १०८० चे ४०% = ४३२ */
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; z-index: 5; 
+            bottom: 110px; /* फुटरच्या थोडे वर */
+            left: 70px; right: 70px; 
+            max-height: 430px; /* जास्तीत जास्त ४०% जागा */
+            display: flex; 
+            align-items: flex-end; /* <<< हे महत्त्वाचे: मजकूर तळाशी ढकलतो */
+            justify-content: center;
+            text-align: center; 
+            z-index: 5; 
+            /* border: 1px solid red; Uncomment to see the text box boundary */
         }
         .post-desc { 
-            color: #fff; font-size: 50px; font-weight: 700; line-height: 1.5; 
-            text-shadow: 3px 3px 15px rgba(0,0,0,1); 
+            color: #fff; font-size: 52px; font-weight: 700; line-height: 1.4; 
+            text-shadow: 3px 3px 20px rgba(0,0,0,1); margin: 0;
         }
         .highlight { color: var(--accent); font-family: 'Khand', sans-serif; font-weight: 800; display: inline; }
 
+        /* 4. फुटर: थोडे खाली घेतले आहे */
         .post-footer { 
-            position: absolute; bottom: 60px; width: 100%; 
+            position: absolute; bottom: 40px; width: 100%; 
             display: flex; justify-content: center; align-items: center; 
-            color: #fff; font-size: 38px; font-family: 'Khand', sans-serif; font-weight: bold; 
+            color: #fff; font-size: 36px; font-family: 'Khand', sans-serif; font-weight: bold; 
             z-index: 10;
         }
     </style>
 </head>
 <body>
 
-<div class="header"><h1>BAATMI POINT V41</h1></div>
+<div class="header"><h1>BAATMI POINT V42</h1></div>
 
 <div class="container">
     <div class="card">
         <span class="label">❯❯ बातम्यांचे संपादन</span>
-        <textarea id="uDesc" rows="4" placeholder="बातमी टाइप करा..."></textarea>
+        <textarea id="uDesc" rows="4" placeholder="बातमी टाइप करा (मजकूर आपोआप खाली सेट होईल)..."></textarea>
         <input type="text" id="uWords" placeholder="हायलाईट शब्द">
     </div>
 
@@ -82,8 +85,8 @@
     </div>
 
     <div class="card">
-        <span class="label">❯❯ मीडिया सोर्स</span>
-        <label class="file-label">📁 फोटो अपलोड करा
+        <span class="label">❯❯ मीडिया सोर्स (Auto-Crop)</span>
+        <label class="file-label">📁 फोटो अपलोड करा (स्वयं-क्रॉप होईल)
             <input type="file" id="uFile" accept="image/*" onchange="loadImg(event)" style="display:none;">
         </label>
         <div style="margin-top:15px;"></div>
@@ -94,7 +97,7 @@
 
     <div id="preview-area" style="display:none; margin-top:35px; text-align:center;">
         <img id="preview" style="width:100%; border-radius:20px; border: 5px solid var(--neon);">
-        <a id="saveBtn" style="display:block; background:#10b981; color:white; text-decoration:none; padding:18px; border-radius:15px; font-weight:bold; margin-top:20px;">📥 गॅलरीमध्ये सेव्ह करा</a>
+        <a id="saveBtn" style="display:block; background:#10b981; color:white; text-decoration:none; padding:20px; border-radius:15px; font-weight:bold; margin-top:20px;">📥 गॅलरीमध्ये सेव्ह करा</a>
     </div>
 </div>
 
@@ -135,10 +138,11 @@
         document.getElementById('rt-desc').innerHTML = text;
         document.getElementById('rt-foot').innerText = document.getElementById('uWmark').value;
         
+        // V42 Font Resizing Logic:
         const el = document.getElementById('rt-desc');
-        const container = document.querySelector('.post-content');
-        let size = 50; el.style.fontSize = size + 'px';
-        while (el.scrollHeight > container.offsetHeight && size > 25) { 
+        // 430px पेक्षा जास्त उंची झाल्यास फॉन्ट लहान होईल.
+        let size = 52; el.style.fontSize = size + 'px';
+        while (el.scrollHeight > 430 && size > 28) { 
             size--; el.style.fontSize = size + 'px'; 
         }
 
@@ -150,7 +154,7 @@
                 document.getElementById('preview').src = data;
                 document.getElementById('preview-area').style.display = "block";
                 document.getElementById('saveBtn').href = data;
-                document.getElementById('saveBtn').download = "BaatmiPoint_V41.png";
+                document.getElementById('saveBtn').download = "BaatmiPoint_V42.png";
                 btn.innerText = "लाँच HD पोस्टर ✨";
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             });
