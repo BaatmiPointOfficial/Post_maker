@@ -1,158 +1,162 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Maker V36 - Seamless Vision</title>
-    <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700;800&family=Mukta:wght@400;700&display=swap" rel="stylesheet">
+    <title>Baatmi Point Studio - V95 Master</title>
+    <link href="https://fonts.googleapis.com/css2?family=Khand:wght@700;800&family=Mukta:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --accent: #ffcc00; --bg: #0f172a; }
-        body { font-family: 'Mukta', sans-serif; background: #f1f5f9; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-        .header { background: #0f172a; width: 100%; padding: 15px; text-align: center; border-bottom: 3px solid var(--accent); position: sticky; top: 0; z-index: 100; }
-        .header h1 { margin: 0; font-size: 22px; color: var(--accent); font-family: 'Khand', sans-serif; letter-spacing: 1px; }
-
-        .main { padding: 20px; max-width: 500px; width: 100%; box-sizing: border-box; }
-        .editor { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
-        .section-label { font-size: 13px; font-weight: bold; color: #64748b; margin-bottom: 5px; display: block; }
-        
-        textarea, input[type="text"] { width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; border: 1.5px solid #e2e8f0; font-size: 16px; box-sizing: border-box; outline: none; }
-        .color-row { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; padding: 10px; background: #f8fafc; border-radius: 15px; }
-        .c-btn { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; border: 3px solid #fff; transition: 0.2s; }
-        .c-btn.active { border-color: #0f172a; transform: scale(1.1); }
-        .btn-gen { background: #0f172a; color: var(--accent); border: none; padding: 18px; border-radius: 15px; font-weight: bold; font-size: 19px; width: 100%; cursor: pointer; }
-
-        /* V36 Rendering Engine - Seamless Mode */
-        #render-wrap { position: absolute; left: -9999px; }
-        #poster { width: 1080px; height: 1080px; background: #000; position: relative; overflow: hidden; border: 20px solid #fff; }
-        .post-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; }
-        .post-overlay { position: absolute; bottom: 0; width: 100%; height: 50%; background: linear-gradient(transparent, rgba(0,0,0,1) 48%, #000); }
-        .post-content { position: absolute; bottom: 140px; left: 100px; right: 100px; text-align: center; height: 380px; display: flex; align-items: center; justify-content: center; z-index: 5; }
-        .post-desc { color: #fff; font-size: 52px; font-weight: 700; line-height: 1.65; width: 100%; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-        
-        /* V36: Seamless Highlight - No Box, No Brackets */
-        .highlight { 
-            color: var(--accent); 
-            font-family: 'Khand', sans-serif;
-            font-weight: 800; 
-            display: inline;
-            padding: 0; 
-            margin: 0; 
-            background: none; 
-            border: none; 
+        :root { 
+            --accent: #ffcc00; 
+            --dark: #0f172a; 
+            --bg-page: #e2e8f0; 
+            --blue: #3ec7ff; 
+            --card-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
+        
+        body { 
+            font-family: 'Mukta', sans-serif; 
+            background: var(--bg-page); 
+            margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; color: #1e293b;
+        }
+        
+        .header { 
+            background: var(--dark); width: 100%; padding: 24px; text-align: center; border-bottom: 5px solid var(--accent); position: sticky; top: 0; z-index: 100;
+        }
+        .header h1 { margin: 0; font-size: 26px; color: var(--accent); font-family: 'Khand', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; }
 
-        .post-footer { position: absolute; bottom: 50px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 20px; color: #fff; font-size: 45px; font-family: 'Khand', sans-serif; font-weight: bold; }
-        .social-svg { width: 50px; height: 50px; fill: var(--accent); }
-        #logo-preview { height: 100px; position: absolute; top: 50px; left: 50px; z-index: 10; display: none; }
+        .main { padding: 25px; max-width: 520px; width: 100%; box-sizing: border-box; }
+        
+        .card { 
+            background: #f8fafc; 
+            padding: 30px; 
+            border-radius: 28px; 
+            box-shadow: var(--card-shadow); 
+            margin-bottom: 30px; 
+            border: 1px solid rgba(203, 213, 225, 0.5); 
+        }
+        
+        .section-title { font-weight: 800; font-size: 14px; color: var(--dark); margin-bottom: 15px; display: block; text-transform: uppercase; opacity: 0.8; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+        .btn-opt { padding: 16px; border: 2px solid #cbd5e1; border-radius: 14px; text-align: center; cursor: pointer; font-size: 14px; font-weight: 800; background: #fff; color: #64748b; }
+        .btn-opt.active { background: var(--dark); color: var(--accent); border-color: var(--dark); box-shadow: 0 8px 15px rgba(15, 23, 42, 0.2); }
+
+        label { font-weight: 700; font-size: 13px; color: #475569; display: block; margin-top: 18px; margin-bottom: 6px; }
+        textarea, input[type="text"], input[type="file"] { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid #cbd5e1; font-size: 16px; box-sizing: border-box; outline: none; background: #fff; }
+        
+        .btn-gen { background: linear-gradient(135deg, var(--accent) 0%, #eab308 100%); color: var(--dark); border: none; padding: 20px; border-radius: 18px; font-weight: 800; font-size: 20px; width: 100%; cursor: pointer; margin-top: 30px; box-shadow: 0 10px 20px rgba(234, 179, 8, 0.3); }
+
+        /* --- POSTER LOGIC --- */
+        #render-wrap { position: absolute; left: -9999px; }
+        #poster { width: 1080px; height: 1080px; background: #000; position: relative; overflow: hidden; }
+        .post-bg { width: 100%; height: 100%; object-fit: cover; position: absolute; }
+        .shadow-layer { position: absolute; inset: 0; z-index: 5; background: linear-gradient(90deg, #000 45%, rgba(0,0,0,0.6) 75%, transparent 100%); }
+        .tpl-seamless .shadow-layer { background: linear-gradient(0deg, #000 35%, transparent 70%); }
+
+        /* बदल: लोगोची जागा कोपऱ्यात सेट केली (Top:40px, Right:50px) */
+        .logo-wrap { position: absolute; top: 40px; right: 50px; z-index: 20; }
+        /* बदल: लोगोचा आकार वाढवला (Height: 160px) */
+        .logo-img { height: 160px; width: auto; display: none; filter: drop-shadow(0 0 15px rgba(255,255,255,0.3)); }
+
+        .post-content { position: absolute; inset: 0; z-index: 10; display: flex; align-items: center; padding: 60px 30px; }
+        .tpl-cinematic .left-box { width: 62%; height: 720px; display: flex; flex-direction: column; justify-content: flex-start; position: relative; padding-right: 50px; }
+        .tpl-cinematic .left-box::after { content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 16px; height: 420px; border-radius: 20px; background: var(--accent); }
+        .tpl-cinematic.tpl-blue .left-box::after { background: var(--blue); }
+        .tpl-cinematic .right-box { width: 38%; display: flex; justify-content: flex-end; align-items: center; }
+        .tpl-seamless .post-content { flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 15px; }
+        .tpl-seamless .left-box { width: 100%; height: 378px; min-height: 378px; display: flex; align-items: center; justify-content: center; text-align: center; margin-bottom: 20px; }
+        .tpl-seamless .left-box::after { display: none; }
+        .tpl-seamless .right-box { display: none !important; }
+        .post-desc { color: #ffffff !important; font-weight: 800; line-height: 1.25; text-align: left; width: 100%; text-shadow: 2px 2px 15px rgba(0,0,0,0.9); }
+        .tpl-seamless .post-desc { text-align: center; }
+        .hl-text { font-family: 'Mukta'; font-weight: 800; color: var(--accent) !important; display: inline; }
+        .tpl-blue .hl-text { color: var(--blue) !important; }
+        .round-container { width: 400px; height: 400px; border-radius: 50%; border: 12px solid var(--accent); box-shadow: 0 0 70px rgba(0,0,0,0.8); overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        .tpl-blue .round-container { border-color: var(--blue); }
+        .round-media { width: 100%; height: 100%; object-fit: cover; }
+        .footer { position: absolute; bottom: 50px; left: 80px; color: var(--accent); font-family: 'Khand'; font-size: 45px; font-weight: bold; z-index: 15; }
+        .tpl-seamless .footer { position: relative; bottom: 0; left: 0; text-align: center; width: 100%; }
+        .tpl-blue .footer { color: var(--blue); }
+        #preview-img { width: 100%; border-radius: 24px; margin-top: 30px; display: none; border: 5px solid var(--dark); box-shadow: var(--card-shadow); }
+        .btn-save { display: none; background: #10b981; color: white; text-decoration: none; padding: 20px; border-radius: 16px; font-weight: 800; text-align: center; margin-top: 15px; width: 100%; box-sizing: border-box; font-size: 18px; }
     </style>
 </head>
 <body>
 
-<div class="header"><h1>BAATMI POINT V36</h1></div>
+<div class="header"><h1>BAATMI POINT STUDIO V95</h1></div>
 
 <div class="main">
-    <div class="editor">
-        <span class="section-label">१. बातमी लिहा</span>
-        <textarea id="uDesc" rows="4" placeholder="मजकूर लिहा..."></textarea>
+    <div class="card">
+        <span class="section-title">मांडणी (Layout) निवडा</span>
+        <div class="btn-grid">
+            <div class="btn-opt active" onclick="setMode('cinematic', this)">CINEMATIC</div>
+            <div class="btn-opt" onclick="setMode('seamless', this)">SEAMLESS</div>
+        </div>
         
-        <span class="section-label">२. हायलाईट शब्द</span>
-        <input type="text" id="uWords" placeholder="कोमा देऊन लिहा">
-        
-        <span class="section-label">३. रंग निवडा</span>
-        <div class="color-row">
-            <div class="c-btn active" style="background: #ffcc00;" onclick="setColor('#ffcc00', this)"></div>
-            <div class="c-btn" style="background: #3ec7ff;" onclick="setColor('#3ec7ff', this)"></div>
-            <div class="c-btn" style="background: #10b981;" onclick="setColor('#10b981', this)"></div>
-            <div class="c-btn" style="background: #e11d48;" onclick="setColor('#e11d48', this)"></div>
+        <span class="section-title">थीम निवडा</span>
+        <div class="btn-grid">
+            <div class="btn-opt active" onclick="setTheme('yellow', this)">YELLOW</div>
+            <div class="btn-opt" onclick="setTheme('blue', this)">BLUE</div>
         </div>
 
-        <span class="section-label">४. बातमीचा फोटो</span>
-        <input type="file" id="uFile" accept="image/*" onchange="loadImg(event, 'target-img')" style="margin-bottom:15px;">
+        <label>१. बॅकग्राउंड फोटो</label>
+        <input type="file" onchange="loadImg(event, 'target-img')">
         
-        <span class="section-label">५. लोगो (Optional)</span>
-        <input type="file" id="uLogo" accept="image/*" onchange="loadImg(event, 'logo-preview')" style="margin-bottom:15px;">
+        <div id="round-ui-box">
+            <label>२. राऊंड प्रोफाइल फोटो</label>
+            <input type="file" onchange="loadImg(event, 'round-photo')">
+        </div>
 
-        <span class="section-label">६. हँडल (Watermark)</span>
-        <input type="text" id="uWmark" value="baatmipoint.in">
-        <button class="btn-gen" id="genBtn" onclick="generate()">HD पोस्ट तयार करा ✨</button>
+        <label>३. लोगो अपलोड करा</label>
+        <input type="file" onchange="loadLogo(event)">
+
+        <label>४. हँडल नाव (उदा. baatmipoint.in)</label>
+        <input type="text" id="uHandle" value="baatmipoint.in">
+
+        <label>५. बातमी लिहा</label>
+        <textarea id="uDesc" rows="4"></textarea>
+        
+        <label>६. हायलाईट शब्द</label>
+        <input type="text" id="uWords">
+
+        <button class="btn-gen" onclick="generate()">HD पोस्ट तयार करा 🎬</button>
     </div>
-    <img id="preview" style="width:100%; display:none; margin-top:25px; border-radius:15px; border: 5px solid #0f172a;">
-    <a id="saveBtn" style="display:none; background:#10b981; color:white; text-decoration:none; padding:18px; border-radius:12px; font-weight:bold; text-align:center; margin-top:12px;">गॅलरीमध्ये सेव्ह करा 📥</a>
+
+    <img id="preview-img">
+    <a id="download-btn" class="btn-save">गॅलरीमध्ये सेव्ह करा 📥</a>
 </div>
 
 <div id="render-wrap">
-    <div id="poster">
-        <img id="logo-preview">
-        <img id="target-img" class="post-bg">
-        <div class="post-overlay"></div>
-        <div class="post-content"><div id="rt-desc" class="post-desc"></div></div>
-        <div class="post-footer">
-            <svg class="social-svg" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1V12h3l-.5 3h-2.5v6.8c4.56-.93 8-4.96 8-9.8z"/></svg>
-            <span id="rt-foot"></span>
+    <div id="poster" class="tpl-cinematic tpl-yellow">
+        <img id="target-img" class="post-bg"><div class="shadow-layer"></div>
+        <div class="logo-wrap"><img id="render-logo" class="logo-img"></div>
+        <div class="post-content">
+            <div class="left-box" id="box-l"><div id="render-text" class="post-desc"></div></div>
+            <div class="right-box"><div class="round-container" id="r-container"><img id="round-photo" class="round-media"></div></div>
+            <div id="render-handle" class="footer">baatmipoint.in</div>
         </div>
     </div>
 </div>
 
 <script>
-    function setColor(hex, btn) {
-        document.documentElement.style.setProperty('--accent', hex);
-        document.querySelectorAll('.c-btn').forEach(x => x.classList.remove('active'));
-        if(btn) btn.classList.add('active');
-    }
-
-    function loadImg(e, targetId) {
-        const reader = new FileReader();
-        reader.onload = (event) => { 
-            const img = document.getElementById(targetId);
-            img.src = event.target.result;
-            img.style.display = "block";
-        }
-        reader.readAsDataURL(e.target.files[0]);
-    }
-
+    let currentMode = 'cinematic'; let currentTheme = 'yellow'; let bgUploaded = false;
+    function setMode(mode, btn) { currentMode = mode; btn.parentElement.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('active')); btn.classList.add('active'); document.getElementById('poster').className = `tpl-${currentMode} tpl-${currentTheme}`; document.getElementById('round-ui-box').style.display = (mode === 'seamless') ? 'none' : 'block'; }
+    function setTheme(theme, btn) { currentTheme = theme; btn.parentElement.querySelectorAll('.btn-opt').forEach(b => b.classList.remove('active')); btn.classList.add('active'); document.getElementById('poster').className = `tpl-${currentMode} tpl-${theme}`; const accent = (theme === 'yellow') ? '#ffcc00' : '#3ec7ff'; document.getElementById('render-handle').style.color = accent; }
+    function loadImg(e, id) { if (e.target.files[0]) { const reader = new FileReader(); reader.onload = (event) => { document.getElementById(id).src = event.target.result; if(id === 'target-img') bgUploaded = true; }; reader.readAsDataURL(e.target.files[0]); } }
+    function loadLogo(e) { if (e.target.files[0]) { const reader = new FileReader(); reader.onload = (event) => { const l = document.getElementById('render-logo'); l.src = event.target.result; l.style.display = "block"; }; reader.readAsDataURL(e.target.files[0]); } }
     async function generate() {
-        let text = document.getElementById('uDesc').value;
-        const wordsInput = document.getElementById('uWords').value;
-        const words = wordsInput ? wordsInput.split(',').map(w => w.trim()).filter(w => w !== "") : [];
-        const btn = document.getElementById('genBtn');
-
-        if(!document.getElementById('target-img').src || text.trim() === "") return alert("माहिती भरा!");
-
-        // Sort words by length descending to match phrases before single words
-        words.sort((a, b) => b.length - a.length);
-
-        words.forEach(word => {
-            const regex = new RegExp(word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-            text = text.replace(regex, match => `<span class="highlight">${match}</span>`);
-        });
-
-        document.getElementById('rt-desc').innerHTML = text;
-        document.getElementById('rt-foot').innerText = document.getElementById('uWmark').value;
-        
-        const el = document.getElementById('rt-desc');
-        const container = document.querySelector('.post-content');
-        let size = 52; el.style.fontSize = size + 'px';
-        while ((el.scrollHeight > container.offsetHeight || el.scrollWidth > container.offsetWidth) && size > 25) {
-            size--; el.style.fontSize = size + 'px';
-        }
-
-        btn.innerText = "Generating Ultra HD... ⏳";
-        
-        setTimeout(() => {
-            html2canvas(document.getElementById('poster'), { scale: 4, useCORS: true }).then(canvas => {
-                const data = canvas.toDataURL('image/png', 1.0);
-                const previewImg = document.getElementById('preview');
-                const saveBtn = document.getElementById('saveBtn');
-                previewImg.src = data; previewImg.style.display = "block";
-                saveBtn.href = data; saveBtn.download = "BaatmiPoint_V36_Seamless.png";
-                saveBtn.style.display = "block";
-                btn.innerText = "HD पोस्ट तयार करा ✨";
-                previewImg.scrollIntoView({ behavior: 'smooth' });
-            });
-        }, 800);
+        let text = document.getElementById('uDesc').value; const uWords = document.getElementById('uWords').value; const renderText = document.getElementById('render-text'); const boxL = document.getElementById('box-l');
+        if(!text || !bgUploaded) return alert("फोटो आणि मजकूर भरा!"); document.getElementById('render-handle').innerText = document.getElementById('uHandle').value;
+        if(uWords) { uWords.split(',').forEach(w => { const word = w.trim(); if(word) { const reg = new RegExp(word, 'gi'); text = text.replace(reg, match => `<span class="hl-text">${match}</span>`); } }); }
+        renderText.innerHTML = text;
+        let fontSize = (currentMode === 'seamless') ? 140 : 230; renderText.style.fontSize = fontSize + 'px';
+        while ((renderText.scrollHeight > boxL.offsetHeight || renderText.scrollWidth > boxL.offsetWidth) && fontSize > 25) { fontSize -= 2; renderText.style.fontSize = fontSize + 'px'; }
+        setTimeout(() => { html2canvas(document.getElementById('poster'), { scale: 3, useCORS: true }).then(canvas => {
+            const data = canvas.toDataURL('image/png'); const pImg = document.getElementById('preview-img'); const dBtn = document.getElementById('download-btn');
+            pImg.src = data; pImg.style.display = "block"; dBtn.href = data; dBtn.download = `BaatmiPoint_V95.png`; dBtn.style.display = "block"; pImg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }); }, 300);
     }
 </script>
 </body>
 </html>
-            
